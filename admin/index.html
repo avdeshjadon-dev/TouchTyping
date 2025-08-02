@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing App Admin</title>
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --success: #10B981;
+            --error: #EF4444;
+            --text-dark: #111827;
+            --text-light: #f7fafc;
+            --text-gray: #6B7280;
+            --bg-main: #F9FAFB;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        html[data-theme="dark"] {
+            --primary: #90cdf4;
+            --primary-dark: #63b3ed;
+            --success: #48bb78;
+            --error: #f56565;
+            --text-dark: #edf2f7;
+            --text-light: #1a202c;
+            --text-gray: #a0aec0;
+            --bg-main: #1a202c;
+            --bg-card: #2d3748;
+            --border-color: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(110%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- Auth Page --- */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 420px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow-lg);
+            animation: scaleIn 0.5s var(--ease-out-cubic) forwards;
+            overflow: hidden;
+        }
+
+        .auth-header {
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-header h2 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .auth-body {
+            padding: 2rem 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.25s ease-out;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            font-family: "Inter", sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+            background-color: var(--bg-card);
+        }
+
+        /* --- Dashboard Layout --- */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--bg-card);
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 1100;
+            transition: transform 0.35s var(--ease-out-cubic);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.5rem;
+            color: var(--text-gray);
+            text-decoration: none;
+            margin: 0.25rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease-out;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            color: var(--primary);
+            background: color-mix(in srgb, var(--primary) 10%, transparent);
+        }
+
+        .menu-item.active {
+            font-weight: 600;
+        }
+
+        .menu-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            transition: margin-left 0.35s var(--ease-out-cubic);
+        }
+
+        .content-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        #mobile-menu-toggle {
+            display: none;
+        }
+
+        .content-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-right: auto;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            font-size: 1.25rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            transition: all 0.2s ease-out;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary);
+            background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+        }
+
+        #logout-btn:hover {
+            color: var(--error);
+            background-color: color-mix(in srgb, var(--error) 10%, transparent);
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.is-active {
+            display: block;
+            animation: fadeInUp 0.5s var(--ease-out-cubic) forwards;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* --- Dashboard & Content Components --- */
+        .stats-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            margin-bottom: 1.5rem;
+        }
+
+        .card,
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover,
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .stat-card .stat-title {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .admin-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-form-content,
+        .tab-list-content {
+            display: none;
+        }
+
+        .tab-form-content.active,
+        .tab-list-content.active {
+            display: block;
+        }
+
+        .add-sentence-form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .add-sentence-form input {
+            flex-grow: 1;
+        }
+
+        .sentence-list {
+            list-style: none;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .sentence-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            gap: 1rem;
+        }
+
+        .sentence-item:last-child {
+            border-bottom: none;
+        }
+
+        .sentence-text {
+            flex-grow: 1;
+            color: var(--text-gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .sentence-actions {
+            flex-shrink: 0;
+            display: flex;
+        }
+
+        .sentence-actions .btn-icon {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            transition: all 0.2s ease-out;
+        }
+
+        .sentence-actions .btn-icon:hover {
+            background: var(--bg-main);
+        }
+
+        .sentence-actions .edit-btn:hover {
+            color: var(--primary);
+        }
+
+        .sentence-actions .delete-btn:hover {
+            color: var(--error);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            text-decoration: none;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--text-light);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            box-shadow: var(--box-shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* --- User Table --- */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-table th {
+            background-color: var(--bg-main);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: var(--bg-main);
+        }
+
+
+        /* --- Recent Activity --- */
+        #recent-activity-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-details {
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+
+        .activity-details strong {
+            color: var(--primary);
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            flex-shrink: 0;
+        }
+
+        .delete-activity-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .delete-activity-btn:hover {
+            color: var(--error);
+            background-color: color-mix(in srgb, var(--error) 10%, transparent);
+        }
+
+        /* --- Charts --- */
+        .charts-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            margin-top: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .charts-container {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+
+        /* --- Modals --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--box-shadow-lg);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            background-color: var(--bg-main);
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        /* --- Toast Notifications --- */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow-lg);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            min-width: 320px;
+            opacity: 0;
+            animation: slideInRight 0.5s var(--ease-out-cubic) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast.hide {
+            transition: all 0.4s ease-in;
+            opacity: 0;
+            transform: translateX(110%);
+        }
+
+        .toast::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+        }
+
+        .toast-success::before {
+            background: var(--success);
+        }
+
+        .toast-error::before {
+            background: var(--error);
+        }
+
+        .toast-icon {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .toast-success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast-error .toast-icon {
+            color: var(--error);
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+        }
+
+        /* --- Profile Section --- */
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            margin-left: 0.5rem;
+            background-color: var(--bg-main);
+            cursor: pointer;
+        }
+
+        .current-profile-display {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .current-profile-display img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            margin-bottom: 1rem;
+            background-color: var(--bg-main);
+        }
+
+        .current-profile-display h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-gray);
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 1rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .avatar-option {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease-out;
+            background-color: var(--bg-main);
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: color-mix(in srgb, var(--text-gray) 50%, transparent);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+        }
+
+        .profile-actions {
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            #mobile-menu-toggle {
+                display: inline-flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="auth-container" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Typing App Admin</h2>
+            </div>
+            <div class="auth-body">
+                <div class="form-group">
+                    <label for="login-email">Admin Email</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="Enter admin email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter password">
+                </div>
+                <button id="login-btn" class="btn btn-primary" style="width: 100%;">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-dashboard" class="admin-layout hidden">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header"><i class="fas fa-keyboard"></i> <span>Typing Admin</span></div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-section="dashboard"><i
+                        class="fas fa-chart-pie"></i><span>Dashboard</span></a>
+                <a href="#" class="menu-item" data-section="content"><i
+                        class="fas fa-pencil-alt"></i><span>Content</span></a>
+                <a href="#" class="menu-item" data-section="users"><i class="fas fa-users"></i><span>Users</span></a>
+                <a href="#" class="menu-item" data-section="profile"><i
+                        class="fas fa-user-cog"></i><span>Profile</span></a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <header class="content-header">
+                <button id="mobile-menu-toggle" class="icon-btn"><i class="fas fa-bars"></i></button>
+                <h1 id="section-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme"><i
+                            class="fas fa-moon"></i></button>
+                    <button id="logout-btn" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                    <img src="" alt="Admin" id="header-profile-avatar" class="header-avatar" title="Go to Profile">
+                </div>
+            </header>
+
+            <div id="dashboard-section" class="section-content">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-title">Home Row Sentences</div>
+                        <div class="stat-value" id="home-row-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Top Row Sentences</div>
+                        <div class="stat-value" id="top-row-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Bottom Row Sentences</div>
+                        <div class="stat-value" id="bottom-row-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">All Rows Sentences</div>
+                        <div class="stat-value" id="all-row-count">0</div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2>Recent Activity</h2>
+                        <button id="delete-all-activities-btn" class="btn btn-danger btn-sm">Delete All</button>
+                    </div>
+                    <div id="recent-activity-list"></div>
+                </div>
+                <div class="charts-container">
+                    <div class="card">
+                        <h2>Sentences per Row</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="main-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Distribution</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="pie-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-section" class="section-content">
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <h2>Add Sentence</h2>
+                    <div class="admin-tabs">
+                        <button class="tab-btn active" data-tab="home">Home Row</button>
+                        <button class="tab-btn" data-tab="top">Top Row</button>
+                        <button class="tab-btn" data-tab="bottom">Bottom Row</button>
+                        <button class="tab-btn" data-tab="all">All Rows</button>
+                    </div>
+
+                    <div id="home-tab-form" class="tab-form-content active">
+                        <form class="add-sentence-form" data-row="home">
+                            <input type="text" class="form-control" placeholder="Add a new home row sentence..."
+                                required>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+
+                    <div id="top-tab-form" class="tab-form-content">
+                        <form class="add-sentence-form" data-row="top">
+                            <input type="text" class="form-control" placeholder="Add a new top row sentence..."
+                                required>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+
+                    <div id="bottom-tab-form" class="tab-form-content">
+                        <form class="add-sentence-form" data-row="bottom">
+                            <input type="text" class="form-control" placeholder="Add a new bottom row sentence..."
+                                required>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+
+                    <div id="all-tab-form" class="tab-form-content">
+                        <form class="add-sentence-form" data-row="all">
+                            <input type="text" class="form-control" placeholder="Add a new sentence for all rows..."
+                                required>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Existing Sentences</h2>
+                    <div id="home-tab-list" class="tab-list-content active">
+                        <div class="sentence-list-container">
+                            <ul class="sentence-list" id="sentence-list-home"></ul>
+                        </div>
+                    </div>
+                    <div id="top-tab-list" class="tab-list-content">
+                        <div class="sentence-list-container">
+                            <ul class="sentence-list" id="sentence-list-top"></ul>
+                        </div>
+                    </div>
+                    <div id="bottom-tab-list" class="tab-list-content">
+                        <div class="sentence-list-container">
+                            <ul class="sentence-list" id="sentence-list-bottom"></ul>
+                        </div>
+                    </div>
+                    <div id="all-tab-list" class="tab-list-content">
+                        <div class="sentence-list-container">
+                            <ul class="sentence-list" id="sentence-list-all"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="users-section" class="section-content">
+                <div class="grid-layout">
+                    <div class="card">
+                        <h2>Add New User</h2>
+                        <form id="add-user-form">
+                            <div class="form-group">
+                                <label for="user-name">Name</label>
+                                <input type="text" id="user-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-email">Email</label>
+                                <input type="email" id="user-email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-pass">Password</label>
+                                <input type="password" id="user-pass" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add User</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h2>Existing Users</h2>
+                        <div class="table-wrapper">
+                            <table class="user-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="user-list-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-section" class="section-content">
+                <div class="grid-layout">
+                    <div class="card">
+                        <h2>Current Profile</h2>
+                        <div class="current-profile-display">
+                            <img src="" id="current-profile-preview-img" alt="Current Profile Avatar">
+                            <h3 id="profile-email-display"></h3>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Choose a New Avatar</h2>
+                        <div id="avatar-selection-grid" class="avatar-grid">
+                        </div>
+                        <div class="profile-actions">
+                            <button id="save-profile-btn" class="btn btn-primary" disabled>Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="modal" id="edit-sentence-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Sentence</h3><button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body"><input type="text" id="edit-sentence-input" class="form-control"></div>
+            <div class="modal-footer"><button class="btn btn-secondary" id="cancel-edit">Cancel</button><button
+                    class="btn btn-primary" id="save-edit">Save Changes</button></div>
+        </div>
+    </div>
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3><button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" id="cancel-delete">Cancel</button><button
+                    class="btn btn-danger" id="confirm-delete">Delete</button></div>
+        </div>
+    </div>
+    <div class="modal" id="delete-all-activities-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete All Activity</h3><button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete all activity logs? This is permanent.</p>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" id="cancel-delete-all">Cancel</button><button
+                    class="btn btn-danger" id="confirm-delete-all">Delete All</button></div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAU4YqKTgIsRgIwE6mOy-4oNDeKIn_2yU0",
+            authDomain: "touchtyping-de001.firebaseapp.com",
+            projectId: "touchtyping-de001",
+            storageBucket: "touchtyping-de001.appspot.com",
+            messagingSenderId: "515579749742",
+            appId: "1:515579749742:web:fdb7e8815650ef1c2d8d7f",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const authContainer = document.getElementById('auth-container');
+            const adminDashboard = document.getElementById('admin-dashboard');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const menuItems = document.querySelectorAll('.menu-item');
+            const sectionContents = document.querySelectorAll('.section-content');
+            const sectionTitle = document.getElementById('section-title');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabFormContents = document.querySelectorAll('.tab-form-content');
+            const tabListContents = document.querySelectorAll('.tab-list-content');
+            const addSentenceForms = document.querySelectorAll('.add-sentence-form');
+            const editModal = document.getElementById('edit-sentence-modal');
+            const deleteModal = document.getElementById('delete-modal');
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+            const saveProfileBtn = document.getElementById('save-profile-btn');
+            const avatarGrid = document.getElementById('avatar-selection-grid');
+            const profilePreviewImg = document.getElementById('current-profile-preview-img');
+            const headerAvatar = document.getElementById('header-profile-avatar');
+            const profileEmailDisplay = document.getElementById('profile-email-display');
+
+            const deleteAllActivitiesBtn = document.getElementById('delete-all-activities-btn');
+            const deleteAllActivitiesModal = document.getElementById('delete-all-activities-modal');
+            const confirmDeleteAllBtn = document.getElementById('confirm-delete-all');
+            const cancelDeleteAllBtn = document.getElementById('cancel-delete-all');
+
+            let sentenceToEdit = { row: null, index: -1 };
+            let itemToDelete = { type: null, id: null, row: null, index: null };
+            let unsubscribeContent, unsubscribeActivity, unsubscribeUsers;
+            let mainChart, pieChart;
+            let tempSelectedAvatarUrl = null;
+
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                themeToggleBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                if (mainChart) { // Re-render charts on theme change
+                    const counts = {
+                        home: parseInt(document.getElementById('home-row-count').textContent),
+                        top: parseInt(document.getElementById('top-row-count').textContent),
+                        bottom: parseInt(document.getElementById('bottom-row-count').textContent),
+                        all: parseInt(document.getElementById('all-row-count').textContent),
+                    };
+                    renderOrUpdateCharts(counts);
+                }
+            }
+
+            themeToggleBtn.addEventListener('click', () => setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+            setTheme(localStorage.getItem('theme') || 'light');
+
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    authContainer.classList.add('hidden');
+                    adminDashboard.classList.remove('hidden');
+                    loadDashboardStats(); // This will trigger the first chart render
+                    setupListenersForActiveRow();
+                    loadRecentActivity();
+                    loadUsers();
+                    loadProfile(user);
+                } else {
+                    authContainer.classList.remove('hidden');
+                    adminDashboard.classList.add('hidden');
+                    [unsubscribeContent, unsubscribeActivity, unsubscribeUsers].forEach(unsub => unsub && unsub());
+                    if (mainChart) mainChart.destroy();
+                    if (pieChart) pieChart.destroy();
+                }
+            });
+
+            loginBtn.addEventListener('click', () => {
+                auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-password').value)
+                    .catch(error => showToast('error', 'Login Failed', error.message));
+            });
+            logoutBtn.addEventListener('click', () => auth.signOut());
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', e => {
+                    e.preventDefault();
+                    const section = e.currentTarget.dataset.section;
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    sectionContents.forEach(sc => sc.classList.remove('is-active'));
+                    document.getElementById(`${section}-section`).classList.add('is-active');
+                    sectionTitle.textContent = section.charAt(0).toUpperCase() + section.slice(1);
+                    if (section === 'dashboard') {
+                        if (mainChart) mainChart.resize();
+                        if (pieChart) pieChart.resize();
+                    }
+                    if (window.innerWidth <= 992) sidebar.classList.remove('show');
+                });
+            });
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    tabFormContents.forEach(tc => tc.classList.remove('active'));
+                    document.getElementById(`${tab}-tab-form`).classList.add('active');
+
+                    tabListContents.forEach(tc => tc.classList.remove('active'));
+                    document.getElementById(`${tab}-tab-list`).classList.add('active');
+
+                    setupListenersForActiveRow();
+                });
+            });
+
+            mobileMenuToggle.addEventListener('click', () => sidebar.classList.toggle('show'));
+
+            function setupListenersForActiveRow() {
+                if (unsubscribeContent) unsubscribeContent();
+                const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+                unsubscribeContent = db.collection("sentences").doc(activeTab).onSnapshot(doc => {
+                    const sentences = doc.exists && doc.data().sentences ? doc.data().sentences : [];
+                    renderSentenceList(activeTab, sentences);
+                });
+            }
+
+            function loadUsers() {
+                if (unsubscribeUsers) unsubscribeUsers();
+                unsubscribeUsers = db.collection('email').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+                    const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderUsersTable(users);
+                });
+            }
+
+            function loadRecentActivity() {
+                const listEl = document.getElementById('recent-activity-list');
+                unsubscribeActivity = db.collection("activity_log").orderBy("timestamp", "desc").limit(20)
+                    .onSnapshot(snapshot => {
+                        listEl.innerHTML = snapshot.empty ? '<p style="padding: 1rem; color: var(--text-gray);">No recent activity.</p>' : '<ul class="activity-list">' + snapshot.docs.map(doc => {
+                            const activity = doc.data();
+                            const time = activity.timestamp ? new Date(activity.timestamp.seconds * 1000).toLocaleString() : 'Just now';
+                            return `<li class="activity-item"><div class="activity-details"><strong>${activity.action}:</strong> ${activity.details}</div><div class="activity-time">${time}</div></li>`;
+                        }).join('') + '</ul>';
+                    });
+            }
+
+            function renderSentenceList(row, sentences) {
+                const listEl = document.getElementById(`sentence-list-${row}`);
+                listEl.innerHTML = '';
+                if (sentences.length === 0) { listEl.innerHTML = '<p style="color:var(--text-gray); padding: 1rem 0;">No sentences found.</p>'; return; }
+                sentences.forEach((sentence, index) => {
+                    const item = document.createElement('li');
+                    item.className = 'sentence-item';
+                    item.innerHTML = `<span class="sentence-text" title="${sentence}">${sentence}</span><div class="sentence-actions"><button class="btn-icon edit-btn"><i class="fas fa-pencil-alt"></i></button><button class="btn-icon delete-btn"><i class="fas fa-trash"></i></button></div>`;
+                    item.querySelector('.edit-btn').addEventListener('click', () => openEditModal(row, index, sentence));
+                    item.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal('sentence', null, row, index));
+                    listEl.appendChild(item);
+                });
+            }
+
+            function renderUsersTable(users) {
+                const tbody = document.getElementById('user-list-body');
+                tbody.innerHTML = '';
+                if (users.length === 0) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No users found.</td></tr>'; return; }
+                users.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${user.name}</td><td>${user.email}</td><td><button class="btn-icon delete-btn"><i class="fas fa-trash"></i></button></td>`;
+                    tr.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal('user', user.id));
+                    tbody.appendChild(tr);
+                });
+            }
+
+            addSentenceForms.forEach(form => {
+                form.addEventListener('submit', async e => {
+                    e.preventDefault();
+                    const row = form.dataset.row;
+                    const input = form.querySelector('input');
+                    const newSentence = input.value.trim();
+                    if (!newSentence) return;
+
+                    const docRef = db.collection("sentences").doc(row);
+                    await db.runTransaction(async t => {
+                        const doc = await t.get(docRef);
+                        const sentences = doc.exists && doc.data().sentences ? doc.data().sentences : [];
+                        sentences.push(newSentence);
+                        t.set(docRef, { sentences, lastUpdated: new Date() }, { merge: true });
+                    });
+                    await logActivity('Added Sentence', `"${newSentence}" to ${row} row.`);
+                    input.value = '';
+                    showToast('success', 'Sentence Added', 'Saved successfully.');
+                });
+            });
+
+            document.getElementById('add-user-form').addEventListener('submit', async e => {
+                e.preventDefault();
+                const name = document.getElementById('user-name').value;
+                const email = document.getElementById('user-email').value;
+                const pass = document.getElementById('user-pass').value;
+                if (!name || !email || !pass) { showToast('error', 'Missing Fields', 'All fields are required.'); return; }
+
+                await db.collection('email').add({ name, email, pass, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                await logActivity('User Added', `Created user: ${email}`);
+                showToast('success', 'User Added', `${name} has been added.`);
+                e.target.reset();
+            });
+
+            async function saveSentenceEdit() {
+                const { row, index } = sentenceToEdit;
+                const newText = document.getElementById('edit-sentence-input').value.trim();
+                if (!newText || index < 0) return;
+
+                const docRef = db.collection("sentences").doc(row);
+                let oldText = '';
+                await db.runTransaction(async t => {
+                    const doc = await t.get(docRef);
+                    const sentences = doc.data().sentences;
+                    oldText = sentences[index];
+                    sentences[index] = newText;
+                    t.update(docRef, { sentences, lastUpdated: new Date() });
+                });
+                await logActivity('Edited Sentence', `Changed "${oldText}" to "${newText}"`);
+                showToast('success', 'Sentence Updated', 'Changes saved.');
+                hideAllModals();
+            }
+
+            async function deleteItem() {
+                const { type, id, row, index } = itemToDelete;
+                try {
+                    if (type === 'sentence') {
+                        const docRef = db.collection("sentences").doc(row);
+                        let deletedSentence = '';
+                        await db.runTransaction(async t => {
+                            const doc = await t.get(docRef);
+                            const sentences = doc.data().sentences;
+                            deletedSentence = sentences[index];
+                            sentences.splice(index, 1);
+                            t.update(docRef, { sentences, lastUpdated: new Date() });
+                        });
+                        await logActivity('Deleted Sentence', `Removed "${deletedSentence}"`);
+                        showToast('success', 'Sentence Deleted', 'The sentence has been removed.');
+                    } else if (type === 'user') {
+                        await db.collection('email').doc(id).delete();
+                        await logActivity('Deleted User', `Removed user ID: ${id}`);
+                        showToast('success', 'User Deleted', 'The user has been removed.');
+                    }
+                } catch (error) {
+                    console.error("Deletion failed:", error);
+                    showToast('error', 'Deletion Failed', error.message);
+                } finally {
+                    hideAllModals();
+                }
+            }
+
+            function openEditModal(row, index, currentText) {
+                sentenceToEdit = { row, index };
+                document.getElementById('edit-sentence-input').value = currentText;
+                editModal.classList.add('show');
+            }
+
+            function openDeleteModal(type, id, row, index) {
+                itemToDelete = { type, id, row, index };
+                deleteModal.classList.add('show');
+            }
+
+            function hideAllModals() {
+                document.querySelectorAll('.modal').forEach(m => m.classList.remove('show'));
+            }
+
+            document.getElementById('save-edit').addEventListener('click', saveSentenceEdit);
+            document.getElementById('confirm-delete').addEventListener('click', deleteItem);
+            document.querySelectorAll('.modal-close, #cancel-edit, #cancel-delete, #cancel-delete-all').forEach(btn => btn.addEventListener('click', hideAllModals));
+
+            deleteAllActivitiesBtn.addEventListener('click', () => {
+                deleteAllActivitiesModal.classList.add('show');
+            });
+
+            confirmDeleteAllBtn.addEventListener('click', async () => {
+                confirmDeleteAllBtn.disabled = true;
+                confirmDeleteAllBtn.textContent = 'Deleting...';
+                try {
+                    const querySnapshot = await db.collection('activity_log').get();
+                    if (querySnapshot.empty) { showToast('success', 'No Activities', 'There was nothing to delete.'); return; }
+                    const batch = db.batch();
+                    querySnapshot.docs.forEach(doc => { batch.delete(doc.ref); });
+                    await batch.commit();
+                    await logActivity('Cleared Logs', 'All activity logs were deleted.');
+                    showToast('success', 'Activities Cleared', 'All logs have been permanently deleted.');
+                } catch (error) {
+                    console.error("Failed to delete all activities:", error);
+                    showToast('error', 'Deletion Failed', 'Could not clear activity logs.');
+                } finally {
+                    hideAllModals();
+                    confirmDeleteAllBtn.disabled = false;
+                    confirmDeleteAllBtn.textContent = 'Delete All';
+                }
+            });
+
+            // --- DASHBOARD STATS & CHARTS (REFACTORED) ---
+            function loadDashboardStats() {
+                db.collection("sentences").onSnapshot(snapshot => {
+                    const counts = { home: 0, top: 0, bottom: 0, all: 0 };
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        if (counts.hasOwnProperty(doc.id) && data.sentences) {
+                            counts[doc.id] = data.sentences.length;
+                        }
+                    });
+
+                    document.getElementById('home-row-count').textContent = counts.home;
+                    document.getElementById('top-row-count').textContent = counts.top;
+                    document.getElementById('bottom-row-count').textContent = counts.bottom;
+                    document.getElementById('all-row-count').textContent = counts.all;
+
+                    renderOrUpdateCharts(counts);
+                });
+            }
+
+            function renderOrUpdateCharts(counts) {
+                if (mainChart) mainChart.destroy();
+                if (pieChart) pieChart.destroy();
+
+                const textColor = getComputedStyle(document.body).getPropertyValue('--text-gray');
+                const commonOptions = { responsive: true, maintainAspectRatio: false };
+
+                mainChart = new Chart(document.getElementById('main-chart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Home', 'Top', 'Bottom', 'All'],
+                        datasets: [{
+                            label: '# of Sentences',
+                            data: [counts.home, counts.top, counts.bottom, counts.all],
+                            backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#6366F1']
+                        }]
+                    },
+                    options: { ...commonOptions, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor, stepSize: 1 } }, x: { ticks: { color: textColor } } } }
+                });
+
+                pieChart = new Chart(document.getElementById('pie-chart').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Home', 'Top', 'Bottom', 'All'],
+                        datasets: [{
+                            data: [counts.home, counts.top, counts.bottom, counts.all],
+                            backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#6366F1']
+                        }]
+                    },
+                    options: {
+                        ...commonOptions,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'center',
+                                labels: {
+                                    color: textColor,
+                                    boxWidth: 20,
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                });
+            }
+
+            function loadProfile(user) {
+                const defaultAvatar = `https://api.dicebear.com/7.x/micah/svg?seed=${user.email}`;
+                const savedAvatar = localStorage.getItem('adminAvatarUrl') || defaultAvatar;
+
+                headerAvatar.src = savedAvatar;
+                profilePreviewImg.src = savedAvatar;
+                profileEmailDisplay.textContent = user.email;
+                populateAvatarGrid();
+            }
+
+            function populateAvatarGrid() {
+                avatarGrid.innerHTML = '';
+                for (let i = 0; i < 20; i++) {
+                    const avatarSrc = `https://api.dicebear.com/7.x/micah/svg?seed=avatar${i}`;
+                    const img = document.createElement('img');
+                    img.src = avatarSrc;
+                    img.className = 'avatar-option';
+                    img.alt = `Avatar ${i + 1}`;
+                    img.addEventListener('click', () => {
+                        tempSelectedAvatarUrl = avatarSrc;
+                        profilePreviewImg.src = avatarSrc;
+                        document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                        img.classList.add('selected');
+                        saveProfileBtn.disabled = false;
+                    });
+                    avatarGrid.appendChild(img);
+                }
+            }
+
+            headerAvatar.addEventListener('click', () => {
+                const profileMenuItem = document.querySelector('.menu-item[data-section="profile"]');
+                if (profileMenuItem) {
+                    profileMenuItem.click();
+                }
+            });
+
+            saveProfileBtn.addEventListener('click', async () => {
+                if (tempSelectedAvatarUrl) {
+                    localStorage.setItem('adminAvatarUrl', tempSelectedAvatarUrl);
+                    headerAvatar.src = tempSelectedAvatarUrl;
+                    saveProfileBtn.disabled = true;
+                    document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                    await logActivity('Profile Update', `Avatar was changed.`);
+                    showToast('success', 'Profile Saved', 'Your new avatar has been saved.');
+                }
+            });
+
+            async function logActivity(action, details) {
+                try {
+                    await db.collection("activity_log").add({
+                        action,
+                        details,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error("Error logging activity:", error);
+                }
+            }
+
+            function showToast(type, title, message) {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement("div");
+                toast.className = `toast toast-${type}`;
+                const icons = { success: "fa-check-circle", error: "fa-exclamation-circle" };
+                toast.innerHTML = `<div class="toast-icon"><i class="fas ${icons[type]}"></i></div><div><div class="toast-title">${title}</div><div class="toast-message">${message}</div></div>`;
+                toastContainer.appendChild(toast);
+                setTimeout(() => {
+                    toast.classList.add("hide");
+                    setTimeout(() => toast.remove(), 400);
+                }, 5000);
+            }
+
+            document.getElementById('dashboard-section').classList.add('is-active');
+        });
+    </script>
+</body>
+
+</html>

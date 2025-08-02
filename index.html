@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Typing Practice</title>
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light Theme */
+            --primary: #3182ce;
+            --primary-light: #ebf8ff;
+            --primary-dark: #2c5282;
+            --success: #38a169;
+            --error: #e53e3e;
+            --text-dark: #2d3748;
+            --text-light: #f7fafc;
+            --text-gray: #718096;
+            --bg-main: #f7fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+
+            /* Dark Theme */
+            --primary-darkmode: #90cdf4;
+            --primary-dark-darkmode: #63b3ed;
+            --success-darkmode: #48bb78;
+            --error-darkmode: #f56565;
+            --text-dark-darkmode: #edf2f7;
+            --text-light-darkmode: #1a202c;
+            --text-gray-darkmode: #a0aec0;
+            --bg-main-darkmode: #1a202c;
+            --bg-card-darkmode: #2d3748;
+            --border-color-darkmode: #4a5568;
+
+            /* Common variables */
+            --current-bg: rgba(49, 130, 206, 0.1);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-active: 0 1px 3px rgba(49, 130, 206, 0.2);
+            --transition: all 0.2s ease;
+            --nav-height: 60px;
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --primary: var(--primary-darkmode);
+            --primary-light: rgba(144, 205, 244, 0.1);
+            --primary-dark: var(--primary-dark-darkmode);
+            --success: var(--success-darkmode);
+            --error: var(--error-darkmode);
+            --text-dark: var(--text-dark-darkmode);
+            --text-light: var(--text-light-darkmode);
+            --text-gray: var(--text-gray-darkmode);
+            --bg-main: var(--bg-main-darkmode);
+            --bg-card: var(--bg-card-darkmode);
+            --border-color: var(--border-color-darkmode);
+            --current-bg: rgba(144, 205, 244, 0.1);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-active: 0 1px 3px rgba(144, 205, 244, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+            padding-top: var(--nav-height);
+            transition: var(--transition);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.25rem;
+        }
+
+        .navbar-brand i {
+            font-size: 1.5rem;
+        }
+
+        .navbar-center-links {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .navbar-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-button,
+        .icon-button {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+        }
+
+        .nav-button:hover,
+        .icon-button:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .icon-button {
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 0;
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            background-color: var(--bg-main);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        /* Main Content & Panels */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            min-height: 44px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto;
+            white-space: nowrap;
+        }
+
+        /* Typing animation for H1 */
+        h1.typing-effect::after {
+            content: '_';
+            font-weight: 400;
+            color: var(--primary);
+            animation: blinkCursor 1s step-end infinite;
+        }
+
+        .app-container {
+            display: flex;
+            width: 100%;
+            gap: 1.5rem;
+            flex: 1;
+            align-items: stretch;
+        }
+
+        .left-container {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .right-container {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: var(--transition);
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .left-container .panel {
+            animation-delay: 0.1s;
+        }
+
+        .right-container .panel {
+            animation-delay: 0.2s;
+        }
+
+        .stats-panel {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .keyboard-panel {
+            flex-grow: 1;
+            min-height: 250px;
+            justify-content: center;
+            align-items: center;
+            padding-top: 0.5rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        /* Typing Area */
+        .row-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .row-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary-light);
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .row-btn.active {
+            background-color: var(--primary);
+            color: var(--text-light);
+            box-shadow: var(--shadow-active);
+        }
+
+        .level-display {
+            display: inline-block;
+            margin: 0 auto 1rem auto;
+            padding: 0.25rem 0.85rem;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid var(--primary);
+        }
+
+        .timer {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin: 0 0 1rem 0;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .text-display {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            padding: 1.5rem;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            min-height: 120px;
+            margin-bottom: 1rem;
+            flex: 1;
+            overflow-y: auto;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .text-display.placeholder {
+            color: var(--text-gray);
+            font-style: italic;
+            font-size: 16px;
+            font-style: normal;
+        }
+
+        .word {
+            display: inline-block;
+        }
+
+        .space {
+            display: inline-block;
+        }
+
+        .word>span,
+        .space {
+            display: inline-block;
+        }
+
+        .correct {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .incorrect {
+            color: var(--error);
+            text-decoration: underline wavy;
+        }
+
+        .current {
+            background-color: var(--current-bg);
+            color: var(--primary);
+            font-weight: 600;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .current::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--primary);
+            animation: blinkCursor 1s step-end infinite;
+        }
+
+        .typing-area textarea {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            resize: none;
+            min-height: 100px;
+            font-family: inherit;
+            transition: var(--transition);
+            background-color: var(--bg-card);
+            color: var(--text-dark);
+        }
+
+        .typing-area textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-light);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Keyboard */
+        .keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .key {
+            height: 40px;
+            min-width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.15s ease;
+        }
+
+        .key i {
+            font-size: 1rem;
+        }
+
+        .key.correct-key {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: var(--text-light);
+            transform: scale(1.05);
+        }
+
+        .key.incorrect-key {
+            background-color: var(--error);
+            border-color: var(--error);
+            color: var(--text-light);
+            animation: shake-error 0.4s ease;
+        }
+
+        .key.active {
+            background-color: var(--primary);
+            color: var(--text-light);
+            transform: translateY(2px);
+        }
+
+        .key-space {
+            width: 180px;
+        }
+
+        .key-tab,
+        .key-backslash {
+            width: 60px;
+        }
+
+        .key-caps,
+        .key-enter {
+            width: 70px;
+        }
+
+        .key-shift {
+            width: 80px;
+        }
+
+        .key-ctrl,
+        .key-alt,
+        .key-meta {
+            width: 65px;
+            /* Increased from 50px for better visual balance */
+        }
+
+        /* Modal & Stat Graphs */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .modal-overlay.visible .modal {
+            transform: scale(1);
+        }
+
+        .modal .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal .close-btn:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .results-modal h2 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .star-rating {
+            font-size: 1.75rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-graph {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .stats-panel .stat-graph {
+            width: 120px;
+            height: 120px;
+        }
+
+        /* Bigger live stats */
+
+        .progress-ring__svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring__track {
+            stroke: var(--border-color);
+        }
+
+        .progress-ring__bar {
+            stroke: var(--primary);
+            transition: stroke-dashoffset 0.5s ease-out;
+        }
+
+        .stat-graph-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-graph-text h3 {
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+
+        .stats-panel .stat-graph-text h3 {
+            font-size: 2rem;
+        }
+
+        /* Bigger live stats text */
+
+        .stat-graph-text p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .stats-panel .stat-graph-text p {
+            font-size: 0.85rem;
+        }
+
+        /* Bigger live stats text */
+
+        .secondary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        /* Auth & Profile Modals */
+        .form-container {
+            max-width: 400px;
+        }
+
+        .form-container h2 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-main);
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle-icon {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+
+        #password-strength {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            height: 20px;
+        }
+
+        #password-strength.weak {
+            color: var(--error);
+        }
+
+        #password-strength.medium {
+            color: #f59e0b;
+        }
+
+        #password-strength.strong {
+            color: var(--success);
+        }
+
+        .form-switch {
+            margin-top: 1.5rem;
+            color: var(--text-gray);
+        }
+
+        .form-switch a {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 1rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-option {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease-out;
+            background-color: var(--bg-main);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Footer & Animations */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+            background-color: var(--bg-card);
+            transition: var(--transition);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 992px) {
+            .footer-container {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+
+        .footer-column h4 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Specific style for the animated logo */
+        #footer-logo {
+            min-height: 28px;
+            /* Prevents layout jump */
+            display: inline-block;
+            position: relative;
+            color: var(--primary);
+            /* Make it stand out */
+        }
+
+        /* This is the new animation class */
+        #footer-logo.typing-effect::after {
+            content: '_';
+            font-weight: 400;
+            color: var(--primary);
+            animation: blinkCursor 1s step-end infinite;
+            margin-left: 3px;
+        }
+
+
+        .footer-column p {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-gray);
+            text-decoration: none;
+            line-height: 2.2;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1.25rem;
+            /* Slightly more gap */
+            margin-top: 1rem;
+        }
+
+        .footer-socials a {
+            color: var(--text-gray);
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .footer-socials a:hover {
+            color: var(--primary);
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        .footer-bottom-bar {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-bar .fa-heart {
+            color: var(--error);
+            transition: transform 0.3s ease;
+        }
+
+        .footer-bottom-bar:hover .fa-heart {
+            transform: scale(1.3);
+        }
+
+        .error-message {
+            color: var(--error);
+            background-color: rgba(229, 62, 62, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes blinkCursor {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes shake-error {
+
+            10%,
+            90% {
+                transform: translateX(-3px);
+            }
+
+            30%,
+            70% {
+                transform: translateX(3px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+
+            .app-container,
+            .controls,
+            .row-selector {
+                flex-direction: column;
+            }
+
+            .left-container,
+            .right-container,
+            .btn,
+            .row-btn {
+                width: 100%;
+            }
+
+            .navbar {
+                justify-content: space-between;
+            }
+
+            .navbar-center-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .navbar-right-actions {
+                position: fixed;
+                top: var(--nav-height);
+                left: -100%;
+                width: 250px;
+                height: calc(100vh - var(--nav-height));
+                background-color: var(--bg-card);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: var(--shadow);
+                gap: 1rem;
+            }
+
+            .navbar-right-actions.active {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="#" class="navbar-brand"><i class="fas fa-keyboard"></i><span>Minimal Typing</span></a>
+
+        <div class="navbar-center-links">
+            <a href="#" class="nav-button">Learn</a>
+            <a href="#" class="nav-button">Challenge</a>
+            <a href="#" class="nav-button">Game</a>
+            <a href="#" class="nav-button">About Me</a>
+        </div>
+
+        <div class="navbar-right-actions" id="navbar-right-actions">
+            <button class="icon-button" id="theme-toggle" aria-label="Toggle dark mode"><i
+                    class="fas fa-moon"></i></button>
+            <button id="loginBtn" class="nav-button">Login</button>
+            <div id="user-actions" class="hidden" style="display: flex; align-items: center; gap: 1rem;">
+                <button id="logoutBtn" class="icon-button" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                <img id="profileAvatar" class="profile-avatar" src="" alt="Profile" title="Profile">
+            </div>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1 id="main-title"></h1>
+            <p class="subtitle">Improve your typing speed and accuracy with our minimal, distraction-free interface</p>
+        </header>
+        <div class="app-container"></div>
+    </div>
+
+    <div class="modal-overlay results-modal-overlay" id="results-modal-overlay"></div>
+
+    <div class="modal-overlay" id="auth-modal-overlay">
+        <div class="modal form-container" id="auth-modal">
+            <button class="close-btn" id="close-auth-btn">&times;</button>
+            <form id="login-form">
+                <h2>Login</h2>
+                <div id="login-error" class="error-message"></div>
+                <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email"
+                        class="form-control" required></div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" class="form-control" required>
+                        <i class="fas fa-eye password-toggle-icon"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                <p class="form-switch">Don't have an account? <a id="show-signup">Sign Up</a></p>
+            </form>
+            <form id="signup-form" class="hidden">
+                <h2>Create Account</h2>
+                <div id="signup-error" class="error-message"></div>
+                <div class="form-group"><label for="signup-name">Name</label><input type="text" id="signup-name"
+                        class="form-control" required></div>
+                <div class="form-group"><label for="signup-email">Email</label><input type="email" id="signup-email"
+                        class="form-control" required></div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="signup-password" class="form-control" required>
+                        <i class="fas fa-eye password-toggle-icon"></i>
+                    </div>
+                    <div id="password-strength"></div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="signup-confirm-password" class="form-control" required>
+                        <i class="fas fa-eye password-toggle-icon"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                <p class="form-switch">Already have an account? <a id="show-login">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="profile-modal-overlay"></div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column footer-brand-column">
+                <h4 id="footer-logo"></h4>
+                <p>Your journey to faster, more accurate typing starts here. Minimal design, maximum focus. Practice,
+                    track your progress, and master the keyboard.</p>
+                <div class="footer-socials">
+                    <a href="#" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="GitHub" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="#">Practice Mode</a></li>
+                    <li><a href="#">Typing Tests</a></li>
+                    <li><a href="#">Leaderboards</a></li>
+                    <li><a href="#">Typing Games</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom-bar">
+            © 2025 Minimal Typing | Designed with <i class="fas fa-heart"></i> for keyboard mastery.
+        </div>
+    </footer>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAU4YqKTgIsRgIwE6mOy-4oNDeKIn_2yU0",
+            authDomain: "touchtyping-de001.firebaseapp.com",
+            projectId: "touchtyping-de001",
+            storageBucket: "touchtyping-de001.appspot.com",
+            messagingSenderId: "515579749742",
+            appId: "1:515579749742:web:fdb7e8815650ef1c2d8d7f",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.container .app-container');
+            if (container) {
+                container.innerHTML = `
+                        <div class="left-container">
+                            <section class="panel stats-panel">
+                                <div class="stat-graph">
+                                    <svg class="progress-ring__svg" width="120" height="120">
+                                        <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                        <circle class="progress-ring__bar" id="live-wpm-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                    </svg>
+                                    <div class="stat-graph-text"><h3 id="live-wpm">0</h3><p>WPM</p></div>
+                                </div>
+                                <div class="stat-graph">
+                                    <svg class="progress-ring__svg" width="120" height="120">
+                                        <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                        <circle class="progress-ring__bar" id="live-accuracy-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                    </svg>
+                                    <div class="stat-graph-text"><h3 id="live-accuracy">0%</h3><p>Accuracy</p></div>
+                                </div>
+                                <div class="stat-graph">
+                                    <svg class="progress-ring__svg" width="120" height="120">
+                                        <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                        <circle class="progress-ring__bar" id="live-score-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                    </svg>
+                                    <div class="stat-graph-text"><h3 id="live-score">0</h3><p>Score</p></div>
+                                </div>
+                            </section>
+                            <section class="panel keyboard-panel"><div id="keyboard" class="keyboard"></div></section>
+                        </div>
+                        <div class="right-container">
+                            <section class="panel">
+                                <div id="error-message" class="error-message"></div>
+                                <div class="row-selector">
+                                    <button id="homeRowBtn" class="row-btn active" data-row="home">Home Row</button>
+                                    <button id="topRowBtn" class="row-btn" data-row="top">Top Row</button>
+                                    <button id="bottomRowBtn" class="row-btn" data-row="bottom">Bottom Row</button>
+                                    <button id="allRowsBtn" class="row-btn" data-row="all">All Rows</button>
+                                </div>
+                                <div id="levelDisplay" class="level-display">Level: 1</div>
+                                <div class="timer" id="timer">00:00.000</div>
+                                <div class="text-display" id="targetText"></div>
+                                <div class="typing-area"><textarea id="userInput" placeholder="Select a row and click Start..." rows="3" disabled></textarea></div>
+                                <div class="controls">
+                                    <button id="startBtn" class="btn btn-primary">Start</button>
+                                    <button id="resetBtn" class="btn btn-secondary" disabled>Reset</button>
+                                    <button id="nextBtn" class="btn btn-secondary" disabled>Next Level</button>
+                                </div>
+                            </section>
+                        </div>`;
+            }
+            const profileModalContainer = document.getElementById('profile-modal-overlay');
+            if (profileModalContainer) {
+                profileModalContainer.innerHTML = `
+                <div class="modal" id="profile-modal" style="max-width: 500px;">
+                         <button class="close-btn" id="close-profile-btn">&times;</button>
+                         <h2>Edit Profile</h2>
+                         <div class="avatar-grid" id="avatar-grid"></div>
+                         <button id="save-profile-btn" class="btn btn-primary" style="width:100%;">Save Changes</button>
+                 </div>`;
+            }
+
+            const resultsModalContainer = document.getElementById('results-modal-overlay');
+            if (resultsModalContainer) {
+                resultsModalContainer.innerHTML = `
+                   <div class="modal results-modal" id="results-modal">
+                      <button class="close-btn" id="close-results-btn">&times;</button>
+                      <h2>Level Complete!</h2>
+                      <div class="star-rating" id="star-rating"></div>
+                      <div class="modal-stats-container">
+                          <div class="stat-graph">
+                              <svg class="progress-ring__svg" width="140" height="140"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/><circle class="progress-ring__bar" id="wpm-progress" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/></svg>
+                              <div class="stat-graph-text"><h3 id="modal-wpm">0</h3><p>WPM</p></div>
+                          </div>
+                          <div class="stat-graph">
+                               <svg class="progress-ring__svg" width="140" height="140"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/><circle class="progress-ring__bar" id="accuracy-progress" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/></svg>
+                               <div class="stat-graph-text"><h3 id="modal-accuracy">0%</h3><p>Accuracy</p></div>
+                          </div>
+                      </div>
+                      <div class="secondary-stats">
+                            <div class="secondary-stats-item">Time<span id="modal-time">0s</span></div>
+                            <div class="secondary-stats-item" style="color: var(--success);">Correct Words<span id="modal-correct-words">0</span></div>
+                            <div class="secondary-stats-item" style="color: var(--error);">Incorrect Words<span id="modal-incorrect-words">0</span></div>
+                      </div>
+                      <div class="modal-buttons">
+                          <button class="btn btn-secondary" id="retry-btn">Retry</button>
+                          <button class="btn btn-primary" id="next-challenge-btn">Next Level</button>
+                      </div>
+                  </div>`;
+            }
+
+            // --- Re-bind all elements after injecting HTML ---
+            const mainTitle = document.getElementById('main-title');
+            const targetTextElement = document.getElementById('targetText');
+            const userInputElement = document.getElementById('userInput');
+            const timerElement = document.getElementById('timer');
+            const startBtn = document.getElementById('startBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const levelDisplayElement = document.getElementById('levelDisplay');
+            const keyboardContainer = document.getElementById('keyboard');
+            const rowBtns = document.querySelectorAll('.row-btn');
+            const errorMessage = document.getElementById('error-message');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navRightActions = document.getElementById('navbar-right-actions');
+            const resultsModalOverlay = document.getElementById('results-modal-overlay');
+            const closeResultsBtn = document.getElementById('close-results-btn');
+            const nextChallengeBtn = document.getElementById('next-challenge-btn');
+            const retryBtn = document.getElementById('retry-btn');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const loginBtn = document.getElementById('loginBtn');
+            const userActions = document.getElementById('user-actions');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const profileAvatar = document.getElementById('profileAvatar');
+            const authModalOverlay = document.getElementById('auth-modal-overlay');
+            const closeAuthBtn = document.getElementById('close-auth-btn');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const showSignup = document.getElementById('show-signup');
+            const showLogin = document.getElementById('show-login');
+            const profileModalOverlay = document.getElementById('profile-modal-overlay');
+            const closeProfileBtn = document.getElementById('close-profile-btn');
+            const avatarGrid = document.getElementById('avatar-grid');
+            const saveProfileBtn = document.getElementById('save-profile-btn');
+            const loginError = document.getElementById('login-error');
+            const signupError = document.getElementById('signup-error');
+            const passwordStrengthDiv = document.getElementById('password-strength');
+            const signupPasswordInput = document.getElementById('signup-password');
+            const passwordToggleIcons = document.querySelectorAll('.password-toggle-icon');
+
+            // Live stats elements
+            const liveWpmElement = document.getElementById('live-wpm');
+            const liveAccuracyElement = document.getElementById('live-accuracy');
+            const liveScoreElement = document.getElementById('live-score');
+            const liveWpmProgress = document.getElementById('live-wpm-progress');
+            const liveAccuracyProgress = document.getElementById('live-accuracy-progress');
+            const liveScoreProgress = document.getElementById('live-score-progress');
+            const liveRadius = liveWpmProgress.r.baseVal.value;
+            const liveCircumference = 2 * Math.PI * liveRadius;
+
+            // *** CORRECTED AUDIO FILE ***
+            const typeSound = new Audio('data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjQwLjEwMQAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIwAAHwAASUNSRAsAAAAYAAADbGF2YzU2LjYwAAAAAAAAAAAAAAAA//OExhAAAAAABGGAgBAAABHj/////xBTLEIu2AfgToAGiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/OExhQwAALhCAgCAADLce//EVMsUu9AJqgAAgAAAI8jJkGgAGJAACcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/OExhQQAAXCD+ZgAANx7/8RMyxS70AmoAACAAAjyMmQaAAYkAAJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//OExhYQAAXCD+ZgAANx7/8RMyxS70AmoAACAAAjyMmQaAAYkAAJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+
+            let startTime, timerInterval, currentSentence = '',
+                currentRow = 'home';
+            let challengeActive = false,
+                correctCharsCount = 0,
+                totalCharsTyped = 0,
+                errorTimeout;
+            let rowSentences = {
+                home: [],
+                top: [],
+                bottom: [],
+                all: []
+            };
+            let currentLevels = {
+                home: 0,
+                top: 0,
+                bottom: 0,
+                all: 0
+            };
+            let previousWpm = 0,
+                previousScore = 0; // For stat animation
+            let tempAvatarUrl = '';
+
+            const keyboardLayout = [
+                ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
+                ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
+                ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter'],
+                ['ShiftLeft', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'ShiftRight'],
+                ['ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight']
+            ];
+            const keyMap = {
+                '`': 'Backquote',
+                '1': 'Digit1',
+                '2': 'Digit2',
+                '3': 'Digit3',
+                '4': 'Digit4',
+                '5': 'Digit5',
+                '6': 'Digit6',
+                '7': 'Digit7',
+                '8': 'Digit8',
+                '9': 'Digit9',
+                '0': 'Digit0',
+                '-': 'Minus',
+                '=': 'Equal',
+                'q': 'KeyQ',
+                'w': 'KeyW',
+                'e': 'KeyE',
+                'r': 'KeyR',
+                't': 'KeyT',
+                'y': 'KeyY',
+                'u': 'KeyU',
+                'i': 'KeyI',
+                'o': 'KeyO',
+                'p': 'KeyP',
+                '[': 'BracketLeft',
+                ']': 'BracketRight',
+                '\\': 'Backslash',
+                'a': 'KeyA',
+                's': 'KeyS',
+                'd': 'KeyD',
+                'f': 'KeyF',
+                'g': 'KeyG',
+                'h': 'KeyH',
+                'j': 'KeyJ',
+                'k': 'KeyK',
+                'l': 'KeyL',
+                ';': 'Semicolon',
+                "'": 'Quote',
+                'z': 'KeyZ',
+                'x': 'KeyX',
+                'c': 'KeyC',
+                'v': 'KeyV',
+                'b': 'KeyB',
+                'n': 'KeyN',
+                'm': 'KeyM',
+                ',': 'Comma',
+                '.': 'Period',
+                '/': 'Slash',
+                ' ': 'Space'
+            };
+
+            const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+            async function animateTitle() {
+                const titleEl = document.getElementById('main-title');
+                if (!titleEl) return;
+                titleEl.classList.add('typing-effect');
+                await sleep(500);
+                const part1 = "Typyn";
+                for (const char of part1) {
+                    titleEl.textContent += char;
+                    await sleep(150);
+                }
+                await sleep(500);
+                await sleep(100);
+                titleEl.textContent = titleEl.textContent.slice(0, -1);
+                await sleep(100);
+                titleEl.textContent = titleEl.textContent.slice(0, -1);
+                await sleep(300);
+                const part2 = "ing Practice";
+                for (const char of part2) {
+                    titleEl.textContent += char;
+                    await sleep(120);
+                }
+                titleEl.classList.remove('typing-effect');
+            }
+
+            async function animateFooterLogo() {
+                const logoEl = document.getElementById('footer-logo');
+                if (!logoEl) return;
+
+                logoEl.classList.add('typing-effect');
+                await sleep(2000); // Wait a bit after page load
+
+                const part1 = "Minimel"; // Typo
+                for (const char of part1) {
+                    logoEl.textContent += char;
+                    await sleep(120);
+                }
+
+                await sleep(600);
+
+                // Backspace the typo
+                logoEl.textContent = logoEl.textContent.slice(0, -1);
+                await sleep(120);
+                logoEl.textContent = logoEl.textContent.slice(0, -1);
+                await sleep(400);
+
+                // Type the correction and the rest of the phrase
+                const part2 = "al Typing";
+                for (const char of part2) {
+                    logoEl.textContent += char;
+                    await sleep(150);
+                }
+            }
+
+
+            async function init() {
+                [liveWpmProgress, liveAccuracyProgress, liveScoreProgress].forEach(p => {
+                    p.style.strokeDasharray = `${liveCircumference} ${liveCircumference}`;
+                    p.style.strokeDashoffset = liveCircumference;
+                });
+                animateTitle();
+                animateFooterLogo();
+                await fetchSentences();
+                createKeyboard();
+                addEventListeners();
+                initTheme();
+                initAuth();
+                switchRow(currentRow);
+            }
+
+            async function fetchSentences() {
+                try {
+                    const [homeDoc, topDoc, bottomDoc, allDoc] = await Promise.all([db.collection('sentences').doc('home').get(), db.collection('sentences').doc('top').get(), db.collection('sentences').doc('bottom').get(), db.collection('sentences').doc('all').get()]);
+                    rowSentences.home = homeDoc.exists && homeDoc.data().sentences?.length > 0 ? homeDoc.data().sentences : ["Default home sentence."];
+                    rowSentences.top = topDoc.exists && topDoc.data().sentences?.length > 0 ? topDoc.data().sentences : ["Default top sentence."];
+                    rowSentences.bottom = bottomDoc.exists && bottomDoc.data().sentences?.length > 0 ? bottomDoc.data().sentences : ["Default bottom sentence."];
+                    rowSentences.all = allDoc.exists && allDoc.data().sentences?.length > 0 ? allDoc.data().sentences : ["Default 'all' sentence, please check Firestore."];
+                } catch (error) {
+                    console.error("Error fetching sentences from Firestore:", error);
+                    showError("Could not load practice sentences from the database.");
+                    rowSentences = {
+                        home: ["a sad lad asks a fast flash;"],
+                        top: ["we were quiet you try to type;"],
+                        bottom: ["zany zebras zoom can a man buzz;"],
+                        all: ["the quick brown fox jumps over a lazy dog;"]
+                    };
+                }
+            }
+            function initAuth() {
+                auth.onAuthStateChanged(async user => {
+                    if (user) {
+                        loginBtn.classList.add('hidden');
+                        userActions.classList.remove('hidden');
+                        const userProfile = await getUserProfile(user.uid);
+                        profileAvatar.src = userProfile.avatarUrl || `https://api.dicebear.com/7.x/micah/svg?seed=${user.email}`;
+                    } else {
+                        loginBtn.classList.remove('hidden');
+                        userActions.classList.add('hidden');
+                    }
+                });
+            }
+            async function getUserProfile(uid) {
+                try {
+                    const userDoc = await db.collection('email').doc(uid).get();
+                    return userDoc.exists ? userDoc.data() : {};
+                } catch (error) {
+                    console.error("Error fetching user profile:", error);
+                    return {};
+                }
+            }
+            function handleAuth(e) {
+                e.preventDefault();
+                const isSignup = e.target.id === 'signup-form';
+                const email = document.getElementById(isSignup ? 'signup-email' : 'login-email').value;
+                const password = document.getElementById(isSignup ? 'signup-password' : 'login-password').value;
+                const errorEl = document.getElementById(isSignup ? 'signup-error' : 'login-error');
+                errorEl.style.display = 'none';
+                if (isSignup) {
+                    const name = document.getElementById('signup-name').value;
+                    const confirmPassword = document.getElementById('signup-confirm-password').value;
+                    if (password !== confirmPassword) {
+                        errorEl.textContent = "Passwords do not match.";
+                        errorEl.style.display = 'block';
+                        return;
+                    }
+                    if (checkPasswordStrength(password) < 2) {
+                        errorEl.textContent = "Password is too weak.";
+                        errorEl.style.display = 'block';
+                        return;
+                    }
+                    auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
+                        const user = userCredential.user;
+                        db.collection('email').doc(user.uid).set({
+                            name: name,
+                            email: user.email,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            avatarUrl: `https://api.dicebear.com/7.x/micah/svg?seed=${user.email}`
+                        });
+                        authModalOverlay.classList.remove('visible');
+                    }).catch(err => {
+                        errorEl.textContent = err.message;
+                        errorEl.style.display = 'block';
+                    });
+                } else {
+                    auth.signInWithEmailAndPassword(email, password).then(() => authModalOverlay.classList.remove('visible')).catch(err => {
+                        errorEl.textContent = "Invalid login credentials. Please try again.";
+                        errorEl.style.display = 'block';
+                    });
+                }
+            }
+            passwordToggleIcons.forEach(icon => {
+                icon.addEventListener('click', () => {
+                    const input = icon.previousElementSibling;
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    icon.classList.toggle('fa-eye');
+                    icon.classList.toggle('fa-eye-slash');
+                });
+            });
+            function checkPasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 8) strength++;
+                if (password.match(/[a-z]/)) strength++;
+                if (password.match(/[A-Z]/)) strength++;
+                if (password.match(/[0-9]/)) strength++;
+                if (password.match(/[^a-zA-Z0-9]/)) strength++;
+                return strength;
+            }
+            signupPasswordInput.addEventListener('input', () => {
+                const password = signupPasswordInput.value;
+                const strength = checkPasswordStrength(password);
+                passwordStrengthDiv.className = '';
+                if (password.length > 0) {
+                    if (strength < 3) {
+                        passwordStrengthDiv.textContent = 'Weak';
+                        passwordStrengthDiv.className = 'weak';
+                    } else if (strength < 5) {
+                        passwordStrengthDiv.textContent = 'Medium';
+                        passwordStrengthDiv.className = 'medium';
+                    } else {
+                        passwordStrengthDiv.textContent = 'Strong';
+                        passwordStrengthDiv.className = 'strong';
+                    }
+                } else {
+                    passwordStrengthDiv.textContent = '';
+                }
+            });
+            function populateAvatarGrid() {
+                avatarGrid.innerHTML = '';
+                for (let i = 0; i < 20; i++) {
+                    const avatarSrc = `https://api.dicebear.com/7.x/micah/svg?seed=avatar${i}`;
+                    const img = document.createElement('img');
+                    img.src = avatarSrc;
+                    img.className = 'avatar-option';
+                    img.addEventListener('click', () => {
+                        document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                        img.classList.add('selected');
+                        tempAvatarUrl = avatarSrc;
+                    });
+                    avatarGrid.appendChild(img);
+                }
+            }
+            async function saveProfile() {
+                if (!tempAvatarUrl) return;
+                const user = auth.currentUser;
+                if (user) {
+                    try {
+                        saveProfileBtn.disabled = true;
+                        saveProfileBtn.textContent = "Saving...";
+                        await db.collection('email').doc(user.uid).set({
+                            avatarUrl: tempAvatarUrl
+                        }, {
+                            merge: true
+                        });
+                        profileAvatar.src = tempAvatarUrl;
+                        profileModalOverlay.classList.remove('visible');
+                        tempAvatarUrl = '';
+                    } catch (error) {
+                        console.error("Error updating profile: ", error);
+                        alert("Could not save profile.");
+                    } finally {
+                        saveProfileBtn.disabled = false;
+                        saveProfileBtn.textContent = "Save Changes";
+                    }
+                }
+            }
+            function addEventListeners() {
+                mobileMenuBtn.addEventListener('click', () => {
+                    navRightActions.classList.toggle('active');
+                    mobileMenuBtn.innerHTML = navRightActions.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                });
+                startBtn.addEventListener('click', startChallenge);
+                resetBtn.addEventListener('click', retryChallenge);
+                nextBtn.addEventListener('click', nextLevel);
+                userInputElement.addEventListener('keydown', handleKeyDown);
+                userInputElement.addEventListener('keyup', handleKeyUp);
+                userInputElement.addEventListener('input', checkTyping);
+                rowBtns.forEach(btn => btn.addEventListener('click', () => switchRow(btn.dataset.row)));
+                closeResultsBtn.addEventListener('click', hideResultsModal);
+                nextChallengeBtn.addEventListener('click', () => {
+                    hideResultsModal();
+                    nextLevel();
+                });
+                retryBtn.addEventListener('click', () => {
+                    hideResultsModal();
+                    retryChallenge();
+                });
+                themeToggle.addEventListener('click', toggleTheme);
+                loginBtn.addEventListener('click', () => authModalOverlay.classList.add('visible'));
+                closeAuthBtn.addEventListener('click', () => authModalOverlay.classList.remove('visible'));
+                logoutBtn.addEventListener('click', () => auth.signOut());
+                loginForm.addEventListener('submit', handleAuth);
+                signupForm.addEventListener('submit', handleAuth);
+                showSignup.addEventListener('click', () => {
+                    signupForm.classList.remove('hidden');
+                    loginForm.classList.add('hidden');
+                });
+                showLogin.addEventListener('click', () => {
+                    loginForm.classList.remove('hidden');
+                    signupForm.classList.add('hidden');
+                });
+                profileAvatar.addEventListener('click', () => {
+                    populateAvatarGrid();
+                    profileModalOverlay.classList.add('visible');
+                });
+                closeProfileBtn.addEventListener('click', () => profileModalOverlay.classList.remove('visible'));
+                saveProfileBtn.addEventListener('click', saveProfile);
+            }
+            function initTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                setTheme(savedTheme);
+            }
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            function toggleTheme() {
+                setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            }
+            function createKeyboard() {
+                keyboardContainer.innerHTML = '';
+                keyboardLayout.forEach(row => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'keyboard-row';
+                    row.forEach(key => {
+                        const keyDiv = document.createElement('div');
+                        const keyLower = key.toLowerCase();
+                        keyDiv.className = `key key-${keyLower}`;
+                        if (keyLower.includes('shift') || keyLower.includes('alt') || keyLower.includes('control') || keyLower.includes('meta')) {
+                            keyDiv.setAttribute('data-key', key);
+                        } else {
+                            keyDiv.setAttribute('data-key', keyMap[keyLower] || key);
+                        }
+                        const displayMap = {
+                            'ShiftLeft': '<i class="fas fa-arrow-up"></i>',
+                            'ShiftRight': '<i class="fas fa-arrow-up"></i>',
+                            'CapsLock': '<i class="fas fa-lock"></i>',
+                            'Space': '',
+                            'Backspace': '⌫',
+                            'Tab': 'Tab',
+                            'Enter': 'Enter',
+                            'ControlLeft': 'Ctrl',
+                            'ControlRight': 'Ctrl',
+                            'MetaLeft': 'Cmd',
+                            'AltLeft': 'Alt',
+                            'AltRight': 'Alt',
+                            '\\': '\\'
+                        };
+                        keyDiv.innerHTML = displayMap[key] || key;
+                        rowDiv.appendChild(keyDiv);
+                    });
+                    keyboardContainer.appendChild(rowDiv);
+                });
+            }
+            function showError(message) {
+                clearTimeout(errorTimeout);
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                errorTimeout = setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            function updateLevelDisplay() {
+                levelDisplayElement.textContent = `Level: ${currentLevels[currentRow] + 1}`;
+            }
+
+            function loadChallengeText(isPlaceholder = false) {
+                if (isPlaceholder) {
+                    currentSentence = '';
+                    displayTargetText("Text to type will appear here...", true);
+                    userInputElement.placeholder = "Press 'Start' to begin...";
+                    return;
+                }
+                const sentences = rowSentences[currentRow];
+                const levelIndex = currentLevels[currentRow];
+                if (levelIndex >= sentences.length) {
+                    currentSentence = "All levels completed for this row!";
+                    startBtn.disabled = true;
+                } else {
+                    currentSentence = sentences[levelIndex];
+                    startBtn.disabled = false;
+                }
+                displayTargetText(currentSentence, false);
+                updateLevelDisplay();
+            }
+
+            function switchRow(row) {
+                if (challengeActive) {
+                    showError("Please finish or reset the current challenge first.");
+                    return;
+                }
+                currentRow = row;
+                rowBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.row === row));
+                resetChallenge();
+                loadChallengeText(true);
+            }
+
+            function startChallenge() {
+                if (challengeActive) return;
+                loadChallengeText(false);
+                userInputElement.placeholder = "Start typing here...";
+                resetCountersAndUI();
+                userInputElement.focus();
+                startTime = new Date();
+                timerInterval = setInterval(updateTimer, 10);
+            }
+
+            function retryChallenge() {
+                resetChallenge();
+                loadChallengeText(true);
+            }
+            function nextLevel() {
+                const currentLevelIndex = currentLevels[currentRow];
+                const totalLevels = rowSentences[currentRow].length;
+                if (currentLevelIndex < totalLevels - 1) {
+                    currentLevels[currentRow]++;
+                    resetChallenge();
+                    loadChallengeText(true);
+                } else {
+                    showError("You have completed all levels for this row!");
+                }
+            }
+            function resetCountersAndUI() {
+                correctCharsCount = 0;
+                totalCharsTyped = 0;
+                userInputElement.value = '';
+                userInputElement.disabled = false;
+                startBtn.disabled = true;
+                resetBtn.disabled = false;
+                nextBtn.disabled = true;
+                challengeActive = true;
+            }
+            function resetLiveStats() {
+                animateValue(liveWpmElement, previousWpm, 0, 300);
+                animateValue(liveScoreElement, previousScore, 0, 300);
+                liveAccuracyElement.textContent = '0%';
+                liveWpmProgress.style.strokeDashoffset = liveCircumference;
+                liveAccuracyProgress.style.strokeDashoffset = liveCircumference;
+                liveScoreProgress.style.strokeDashoffset = liveCircumference;
+                previousWpm = 0;
+                previousScore = 0;
+            }
+
+            function resetChallenge() {
+                clearInterval(timerInterval);
+                challengeActive = false;
+                timerElement.textContent = '00:00.000';
+                userInputElement.value = '';
+                userInputElement.disabled = true;
+                startBtn.disabled = false;
+                resetBtn.disabled = true;
+                nextBtn.disabled = true;
+                targetTextElement.innerHTML = '';
+                targetTextElement.classList.add('placeholder');
+                document.querySelectorAll('.key.active').forEach(k => k.classList.remove('active'));
+                resetLiveStats();
+            }
+
+            function displayTargetText(text, isPlaceholder = false) {
+                targetTextElement.style.opacity = 0;
+                setTimeout(() => {
+                    targetTextElement.innerHTML = '';
+                    if (isPlaceholder) {
+                        targetTextElement.classList.add('placeholder');
+                        targetTextElement.textContent = text;
+                    } else {
+                        targetTextElement.classList.remove('placeholder');
+                        const parts = text.split(/(\s+)/);
+                        parts.forEach(part => {
+                            if (part.match(/\s+/)) {
+                                const spaceSpan = document.createElement('span');
+                                spaceSpan.className = 'space';
+                                spaceSpan.innerHTML = part.replace(/ /g, '&nbsp;');
+                                targetTextElement.appendChild(spaceSpan);
+                            } else {
+                                const wordSpan = document.createElement('span');
+                                wordSpan.className = 'word';
+                                part.split('').forEach(char => {
+                                    const charSpan = document.createElement('span');
+                                    charSpan.textContent = char;
+                                    wordSpan.appendChild(charSpan);
+                                });
+                                targetTextElement.appendChild(wordSpan);
+                            }
+                        });
+                    }
+                    userInputElement.disabled = (text === "All levels completed for this row!");
+                    targetTextElement.style.opacity = 1;
+                }, 150);
+            }
+            function checkTyping() {
+                if (!challengeActive) return;
+                const typedText = userInputElement.value;
+                const targetChars = targetTextElement.querySelectorAll('.word > span, .space');
+                correctCharsCount = 0;
+                targetChars.forEach((charSpan, index) => {
+                    const originalClass = charSpan.classList.contains('space') ? 'space' : '';
+                    charSpan.className = originalClass;
+                    const char = typedText[index];
+                    const targetChar = charSpan.textContent === '\u00a0' ? ' ' : charSpan.textContent;
+                    if (char == null) {
+                        if (index === typedText.length) charSpan.classList.add('current');
+                    } else if (char === targetChar) {
+                        charSpan.classList.add('correct');
+                        correctCharsCount++;
+                    } else {
+                        charSpan.classList.add('incorrect');
+                    }
+                });
+                totalCharsTyped = typedText.length;
+                updateStats();
+                if (typedText.length >= currentSentence.length) finishChallenge();
+            }
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = Math.floor(progress * (end - start) + start);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+            function updateStats() {
+                if (!challengeActive) return;
+                const elapsedTime = (new Date() - startTime) / 60000;
+                const wpm = elapsedTime > 0 ? Math.round((totalCharsTyped / 5) / elapsedTime) : 0;
+                const accuracy = totalCharsTyped > 0 ? Math.round((correctCharsCount / totalCharsTyped) * 100) : 0;
+                const score = Math.round(wpm * (accuracy / 100));
+
+                if (wpm !== previousWpm) animateValue(liveWpmElement, previousWpm, wpm, 300);
+                if (score !== previousScore) animateValue(liveScoreElement, previousScore, score, 300);
+                previousWpm = wpm;
+                previousScore = score;
+                liveAccuracyElement.textContent = `${accuracy}%`;
+
+                const wpmOffset = liveCircumference - (Math.min(wpm, 150) / 150) * liveCircumference;
+                const accuracyOffset = liveCircumference - (accuracy / 100) * liveCircumference;
+                const scoreOffset = liveCircumference - (Math.min(score, 150) / 150) * liveCircumference;
+                liveWpmProgress.style.strokeDashoffset = wpmOffset;
+                liveAccuracyProgress.style.strokeDashoffset = accuracyOffset;
+                liveScoreProgress.style.strokeDashoffset = scoreOffset;
+            }
+            function finishChallenge() {
+                clearInterval(timerInterval);
+                challengeActive = false;
+                userInputElement.disabled = true;
+                const currentLevelIndex = currentLevels[currentRow];
+                const totalLevels = rowSentences[currentRow].length;
+                if (currentLevelIndex < totalLevels - 1) {
+                    nextBtn.disabled = false;
+                    nextChallengeBtn.disabled = false;
+                } else {
+                    nextBtn.disabled = true;
+                    nextChallengeBtn.disabled = true;
+                }
+                updateStats();
+                showResultsModal();
+            }
+            function updateTimer() {
+                const elapsedTime = new Date() - startTime;
+                const minutes = Math.floor(elapsedTime / 60000).toString().padStart(2, '0');
+                const seconds = Math.floor((elapsedTime % 60000) / 1000).toString().padStart(2, '0');
+                timerElement.textContent = `${minutes}:${seconds}.${String(elapsedTime % 1000).padStart(3, '0')}`;
+            }
+
+            function handleKeyDown(e) {
+                if (challengeActive) {
+                    typeSound.currentTime = 0; // Rewind to start to allow rapid playing
+                    typeSound.play();
+                    flashKeyFeedback(e);
+                    const keyElement = document.querySelector(`.key[data-key="${e.code}"]`);
+                    if (keyElement) keyElement.classList.add('active');
+                }
+            }
+
+            function handleKeyUp(e) {
+                const keyElement = document.querySelector(`.key[data-key="${e.code}"]`);
+                if (keyElement) keyElement.classList.remove('active');
+            }
+            function flashKeyFeedback(e) {
+                if (e.key.length !== 1) return;
+                const targetChar = currentSentence[userInputElement.value.length];
+                const keyElement = document.querySelector(`.key[data-key="${e.code}"]`);
+                if (keyElement) {
+                    const isCorrect = e.key === targetChar;
+                    const feedbackClass = isCorrect ? 'correct-key' : 'incorrect-key';
+                    keyElement.classList.add(feedbackClass);
+                    setTimeout(() => keyElement.classList.remove(feedbackClass), 400);
+                }
+            }
+            function showResultsModal() {
+                const wpm = previousWpm;
+                const accuracy = parseInt(liveAccuracyElement.textContent) || 0;
+                const time = (new Date() - startTime) / 1000;
+                const {
+                    correctWords,
+                    incorrectWords
+                } = calculateWordStats();
+                document.getElementById('modal-wpm').textContent = wpm;
+                document.getElementById('modal-accuracy').textContent = `${accuracy}%`;
+                document.getElementById('modal-time').textContent = `${time.toFixed(1)}s`;
+                document.getElementById('modal-correct-words').textContent = correctWords;
+                document.getElementById('modal-incorrect-words').textContent = incorrectWords;
+                const wpmProgress = document.getElementById('wpm-progress');
+                const accuracyProgress = document.getElementById('accuracy-progress');
+                const radius = wpmProgress.r.baseVal.value;
+                const circumference = 2 * Math.PI * radius;
+                wpmProgress.style.strokeDasharray = `${circumference} ${circumference}`;
+                accuracyProgress.style.strokeDasharray = `${circumference} ${circumference}`;
+                const wpmOffset = circumference - (Math.min(wpm, 150) / 150) * circumference;
+                const accuracyOffset = circumference - (accuracy / 100) * circumference;
+                setTimeout(() => {
+                    wpmProgress.style.strokeDashoffset = wpmOffset;
+                    accuracyProgress.style.strokeDashoffset = accuracyOffset;
+                }, 100);
+                resultsModalOverlay.classList.add('visible');
+            }
+            function hideResultsModal() {
+                resultsModalOverlay.classList.remove('visible');
+            }
+            function calculateWordStats() {
+                const typedWords = userInputElement.value.trim().split(/\s+/).filter(w => w);
+                const targetWords = currentSentence.trim().split(/\s+/).filter(w => w);
+                let correctWords = 0;
+                typedWords.forEach((word, index) => {
+                    if (targetWords[index] && word === targetWords[index]) {
+                        correctWords++;
+                    }
+                });
+                return {
+                    correctWords,
+                    incorrectWords: Math.max(0, targetWords.length - correctWords)
+                };
+            }
+
+            init();
+        });
+    </script>
+</body>
+
+</html>
