@@ -296,6 +296,10 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+        
+        .vertical-layout > .card {
+            margin-bottom: 1.5rem;
+        }
 
         /* --- Dashboard & Content Components --- */
         .stats-container {
@@ -422,6 +426,7 @@
         .sentence-actions {
             flex-shrink: 0;
             display: flex;
+            gap: 0.25rem;
         }
 
         .sentence-actions .btn-icon {
@@ -495,35 +500,6 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
-
-        /* --- User Table --- */
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        .user-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .user-table th,
-        .user-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .user-table th {
-            background-color: var(--bg-main);
-            font-weight: 600;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-        }
-
-        .user-table tbody tr:hover {
-            background-color: var(--bg-main);
-        }
-
 
         /* --- Recent Activity --- */
         #recent-activity-list {
@@ -857,7 +833,6 @@
                         class="fas fa-chart-pie"></i><span>Dashboard</span></a>
                 <a href="#" class="menu-item" data-section="content"><i
                         class="fas fa-pencil-alt"></i><span>Content</span></a>
-                <a href="#" class="menu-item" data-section="users"><i class="fas fa-users"></i><span>Users</span></a>
                 <a href="#" class="menu-item" data-section="profile"><i
                         class="fas fa-user-cog"></i><span>Profile</span></a>
             </nav>
@@ -984,44 +959,6 @@
                 </div>
             </div>
 
-            <div id="users-section" class="section-content">
-                <div class="grid-layout">
-                    <div class="card">
-                        <h2>Add New User</h2>
-                        <form id="add-user-form">
-                            <div class="form-group">
-                                <label for="user-name">Name</label>
-                                <input type="text" id="user-name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="user-email">Email</label>
-                                <input type="email" id="user-email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="user-pass">Password</label>
-                                <input type="password" id="user-pass" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add User</button>
-                        </form>
-                    </div>
-                    <div class="card">
-                        <h2>Existing Users</h2>
-                        <div class="table-wrapper">
-                            <table class="user-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="user-list-body"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div id="profile-section" class="section-content">
                 <div class="grid-layout">
                     <div class="card">
@@ -1132,15 +1069,18 @@
 
             let sentenceToEdit = { row: null, index: -1 };
             let itemToDelete = { type: null, id: null, row: null, index: null };
-            let unsubscribeContent, unsubscribeActivity, unsubscribeUsers;
+            let unsubscribeContent, unsubscribeActivity;
             let mainChart, pieChart;
             let tempSelectedAvatarUrl = null;
+            
+            const ADMIN_UID = "gDWAq4nTTNccRtPPnbQOxqcAapm1";
+
 
             function setTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
                 themeToggleBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                if (mainChart) { // Re-render charts on theme change
+                if (mainChart) {
                     const counts = {
                         home: parseInt(document.getElementById('home-row-count').textContent),
                         top: parseInt(document.getElementById('top-row-count').textContent),
@@ -1155,27 +1095,41 @@
             setTheme(localStorage.getItem('theme') || 'light');
 
             auth.onAuthStateChanged(user => {
-                if (user) {
+                if (user && user.uid === ADMIN_UID) {
                     authContainer.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
-                    loadDashboardStats(); // This will trigger the first chart render
+                    loadDashboardStats();
                     setupListenersForActiveRow();
                     loadRecentActivity();
-                    loadUsers();
                     loadProfile(user);
                 } else {
+                    if (user) {
+                        auth.signOut();
+                    }
                     authContainer.classList.remove('hidden');
                     adminDashboard.classList.add('hidden');
-                    [unsubscribeContent, unsubscribeActivity, unsubscribeUsers].forEach(unsub => unsub && unsub());
+                    [unsubscribeContent, unsubscribeActivity].forEach(unsub => unsub && unsub());
                     if (mainChart) mainChart.destroy();
                     if (pieChart) pieChart.destroy();
                 }
             });
 
             loginBtn.addEventListener('click', () => {
-                auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-password').value)
-                    .catch(error => showToast('error', 'Login Failed', error.message));
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                auth.signInWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        if (userCredential.user.uid !== ADMIN_UID) {
+                            auth.signOut();
+                            showToast('error', 'Access Denied', 'You are not authorized to access this panel.');
+                        }
+                    })
+                    .catch(error => {
+                        showToast('error', 'Login Failed', 'Invalid credentials. Please check email and password.');
+                    });
             });
+
             logoutBtn.addEventListener('click', () => auth.signOut());
 
             menuItems.forEach(item => {
@@ -1222,14 +1176,6 @@
                 });
             }
 
-            function loadUsers() {
-                if (unsubscribeUsers) unsubscribeUsers();
-                unsubscribeUsers = db.collection('email').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
-                    const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    renderUsersTable(users);
-                });
-            }
-
             function loadRecentActivity() {
                 const listEl = document.getElementById('recent-activity-list');
                 unsubscribeActivity = db.collection("activity_log").orderBy("timestamp", "desc").limit(20)
@@ -1256,18 +1202,6 @@
                 });
             }
 
-            function renderUsersTable(users) {
-                const tbody = document.getElementById('user-list-body');
-                tbody.innerHTML = '';
-                if (users.length === 0) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No users found.</td></tr>'; return; }
-                users.forEach(user => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${user.name}</td><td>${user.email}</td><td><button class="btn-icon delete-btn"><i class="fas fa-trash"></i></button></td>`;
-                    tr.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal('user', user.id));
-                    tbody.appendChild(tr);
-                });
-            }
-
             addSentenceForms.forEach(form => {
                 form.addEventListener('submit', async e => {
                     e.preventDefault();
@@ -1288,20 +1222,7 @@
                     showToast('success', 'Sentence Added', 'Saved successfully.');
                 });
             });
-
-            document.getElementById('add-user-form').addEventListener('submit', async e => {
-                e.preventDefault();
-                const name = document.getElementById('user-name').value;
-                const email = document.getElementById('user-email').value;
-                const pass = document.getElementById('user-pass').value;
-                if (!name || !email || !pass) { showToast('error', 'Missing Fields', 'All fields are required.'); return; }
-
-                await db.collection('email').add({ name, email, pass, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                await logActivity('User Added', `Created user: ${email}`);
-                showToast('success', 'User Added', `${name} has been added.`);
-                e.target.reset();
-            });
-
+            
             async function saveSentenceEdit() {
                 const { row, index } = sentenceToEdit;
                 const newText = document.getElementById('edit-sentence-input').value.trim();
@@ -1322,9 +1243,10 @@
             }
 
             async function deleteItem() {
-                const { type, id, row, index } = itemToDelete;
+                const { type } = itemToDelete;
                 try {
                     if (type === 'sentence') {
+                        const { row, index } = itemToDelete;
                         const docRef = db.collection("sentences").doc(row);
                         let deletedSentence = '';
                         await db.runTransaction(async t => {
@@ -1336,10 +1258,6 @@
                         });
                         await logActivity('Deleted Sentence', `Removed "${deletedSentence}"`);
                         showToast('success', 'Sentence Deleted', 'The sentence has been removed.');
-                    } else if (type === 'user') {
-                        await db.collection('email').doc(id).delete();
-                        await logActivity('Deleted User', `Removed user ID: ${id}`);
-                        showToast('success', 'User Deleted', 'The user has been removed.');
                     }
                 } catch (error) {
                     console.error("Deletion failed:", error);
@@ -1348,6 +1266,7 @@
                     hideAllModals();
                 }
             }
+
 
             function openEditModal(row, index, currentText) {
                 sentenceToEdit = { row, index };
@@ -1393,7 +1312,6 @@
                 }
             });
 
-            // --- DASHBOARD STATS & CHARTS (REFACTORED) ---
             function loadDashboardStats() {
                 db.collection("sentences").onSnapshot(snapshot => {
                     const counts = { home: 0, top: 0, bottom: 0, all: 0 };
@@ -1459,7 +1377,6 @@
                             }
                         }
                     }
-
                 });
             }
 

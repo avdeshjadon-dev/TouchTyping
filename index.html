@@ -160,15 +160,6 @@
             padding: 0;
         }
 
-        .profile-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 2px solid var(--border-color);
-            cursor: pointer;
-            background-color: var(--bg-main);
-        }
-
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -631,8 +622,6 @@
             height: 120px;
         }
 
-        /* Bigger live stats */
-
         .progress-ring__svg {
             transform: rotate(-90deg);
         }
@@ -667,8 +656,6 @@
             font-size: 2rem;
         }
 
-        /* Bigger live stats text */
-
         .stat-graph-text p {
             font-size: 0.9rem;
             color: var(--text-gray);
@@ -678,8 +665,6 @@
         .stats-panel .stat-graph-text p {
             font-size: 0.85rem;
         }
-
-        /* Bigger live stats text */
 
         .secondary-stats {
             display: grid;
@@ -698,112 +683,6 @@
 
         .modal-buttons .btn {
             flex: 1;
-        }
-
-        /* Auth & Profile Modals */
-        .form-container {
-            max-width: 400px;
-        }
-
-        .form-container h2 {
-            font-size: 1.75rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--bg-main);
-            color: var(--text-dark);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-toggle-icon {
-            position: absolute;
-            top: 50%;
-            right: 1rem;
-            transform: translateY(-50%);
-            color: var(--text-gray);
-            cursor: pointer;
-        }
-
-        #password-strength {
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            height: 20px;
-        }
-
-        #password-strength.weak {
-            color: var(--error);
-        }
-
-        #password-strength.medium {
-            color: #f59e0b;
-        }
-
-        #password-strength.strong {
-            color: var(--success);
-        }
-
-        .form-switch {
-            margin-top: 1.5rem;
-            color: var(--text-gray);
-        }
-
-        .form-switch a {
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .avatar-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 1rem;
-            max-height: 250px;
-            overflow-y: auto;
-            padding: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .avatar-option {
-            width: 100%;
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s ease-out;
-            background-color: var(--bg-main);
-        }
-
-        .avatar-option.selected {
-            border-color: var(--primary);
-            transform: scale(1.1);
         }
 
         /* Footer & Animations */
@@ -836,17 +715,13 @@
             font-size: 1.1rem;
         }
 
-        /* Specific style for the animated logo */
         #footer-logo {
             min-height: 28px;
-            /* Prevents layout jump */
             display: inline-block;
             position: relative;
             color: var(--primary);
-            /* Make it stand out */
         }
 
-        /* This is the new animation class */
         #footer-logo.typing-effect::after {
             content: '_';
             font-weight: 400;
@@ -884,7 +759,6 @@
         .footer-socials {
             display: flex;
             gap: 1.25rem;
-            /* Slightly more gap */
             margin-top: 1rem;
         }
 
@@ -1034,11 +908,6 @@
         <div class="navbar-right-actions" id="navbar-right-actions">
             <button class="icon-button" id="theme-toggle" aria-label="Toggle dark mode"><i
                     class="fas fa-moon"></i></button>
-            <button id="loginBtn" class="nav-button">Login</button>
-            <div id="user-actions" class="hidden" style="display: flex; align-items: center; gap: 1rem;">
-                <button id="logoutBtn" class="icon-button" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
-                <img id="profileAvatar" class="profile-avatar" src="" alt="Profile" title="Profile">
-            </div>
         </div>
 
         <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
@@ -1053,54 +922,6 @@
     </div>
 
     <div class="modal-overlay results-modal-overlay" id="results-modal-overlay"></div>
-
-    <div class="modal-overlay" id="auth-modal-overlay">
-        <div class="modal form-container" id="auth-modal">
-            <button class="close-btn" id="close-auth-btn">&times;</button>
-            <form id="login-form">
-                <h2>Login</h2>
-                <div id="login-error" class="error-message"></div>
-                <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email"
-                        class="form-control" required></div>
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="login-password" class="form-control" required>
-                        <i class="fas fa-eye password-toggle-icon"></i>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
-                <p class="form-switch">Don't have an account? <a id="show-signup">Sign Up</a></p>
-            </form>
-            <form id="signup-form" class="hidden">
-                <h2>Create Account</h2>
-                <div id="signup-error" class="error-message"></div>
-                <div class="form-group"><label for="signup-name">Name</label><input type="text" id="signup-name"
-                        class="form-control" required></div>
-                <div class="form-group"><label for="signup-email">Email</label><input type="email" id="signup-email"
-                        class="form-control" required></div>
-                <div class="form-group">
-                    <label for="signup-password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="signup-password" class="form-control" required>
-                        <i class="fas fa-eye password-toggle-icon"></i>
-                    </div>
-                    <div id="password-strength"></div>
-                </div>
-                <div class="form-group">
-                    <label for="signup-confirm-password">Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="signup-confirm-password" class="form-control" required>
-                        <i class="fas fa-eye password-toggle-icon"></i>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
-                <p class="form-switch">Already have an account? <a id="show-login">Login</a></p>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="profile-modal-overlay"></div>
 
     <footer>
         <div class="footer-container">
@@ -1145,114 +966,86 @@
         </div>
     </footer>
 
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAU4YqKTgIsRgIwE6mOy-4oNDeKIn_2yU0",
-            authDomain: "touchtyping-de001.firebaseapp.com",
-            projectId: "touchtyping-de001",
-            storageBucket: "touchtyping-de001.appspot.com",
-            messagingSenderId: "515579749742",
-            appId: "1:515579749742:web:fdb7e8815650ef1c2d8d7f",
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.querySelector('.container .app-container');
             if (container) {
                 container.innerHTML = `
-                        <div class="left-container">
-                            <section class="panel stats-panel">
-                                <div class="stat-graph">
-                                    <svg class="progress-ring__svg" width="120" height="120">
-                                        <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                                        <circle class="progress-ring__bar" id="live-wpm-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                                    </svg>
-                                    <div class="stat-graph-text"><h3 id="live-wpm">0</h3><p>WPM</p></div>
+                                <div class="left-container">
+                                    <section class="panel stats-panel">
+                                        <div class="stat-graph">
+                                            <svg class="progress-ring__svg" width="120" height="120">
+                                                <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                                <circle class="progress-ring__bar" id="live-wpm-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                            </svg>
+                                            <div class="stat-graph-text"><h3 id="live-wpm">0</h3><p>WPM</p></div>
+                                        </div>
+                                        <div class="stat-graph">
+                                            <svg class="progress-ring__svg" width="120" height="120">
+                                                <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                                <circle class="progress-ring__bar" id="live-accuracy-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                            </svg>
+                                            <div class="stat-graph-text"><h3 id="live-accuracy">0%</h3><p>Accuracy</p></div>
+                                        </div>
+                                        <div class="stat-graph">
+                                            <svg class="progress-ring__svg" width="120" height="120">
+                                                <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                                <circle class="progress-ring__bar" id="live-score-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                                            </svg>
+                                            <div class="stat-graph-text"><h3 id="live-score">0</h3><p>Score</p></div>
+                                        </div>
+                                    </section>
+                                    <section class="panel keyboard-panel"><div id="keyboard" class="keyboard"></div></section>
                                 </div>
-                                <div class="stat-graph">
-                                    <svg class="progress-ring__svg" width="120" height="120">
-                                        <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                                        <circle class="progress-ring__bar" id="live-accuracy-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                                    </svg>
-                                    <div class="stat-graph-text"><h3 id="live-accuracy">0%</h3><p>Accuracy</p></div>
-                                </div>
-                                <div class="stat-graph">
-                                    <svg class="progress-ring__svg" width="120" height="120">
-                                        <circle class="progress-ring__track" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                                        <circle class="progress-ring__bar" id="live-score-progress" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                                    </svg>
-                                    <div class="stat-graph-text"><h3 id="live-score">0</h3><p>Score</p></div>
-                                </div>
-                            </section>
-                            <section class="panel keyboard-panel"><div id="keyboard" class="keyboard"></div></section>
-                        </div>
-                        <div class="right-container">
-                            <section class="panel">
-                                <div id="error-message" class="error-message"></div>
-                                <div class="row-selector">
-                                    <button id="homeRowBtn" class="row-btn active" data-row="home">Home Row</button>
-                                    <button id="topRowBtn" class="row-btn" data-row="top">Top Row</button>
-                                    <button id="bottomRowBtn" class="row-btn" data-row="bottom">Bottom Row</button>
-                                    <button id="allRowsBtn" class="row-btn" data-row="all">All Rows</button>
-                                </div>
-                                <div id="levelDisplay" class="level-display">Level: 1</div>
-                                <div class="timer" id="timer">00:00.000</div>
-                                <div class="text-display" id="targetText"></div>
-                                <div class="typing-area"><textarea id="userInput" placeholder="Select a row and click Start..." rows="3" disabled></textarea></div>
-                                <div class="controls">
-                                    <button id="startBtn" class="btn btn-primary">Start</button>
-                                    <button id="resetBtn" class="btn btn-secondary" disabled>Reset</button>
-                                    <button id="nextBtn" class="btn btn-secondary" disabled>Next Level</button>
-                                </div>
-                            </section>
-                        </div>`;
-            }
-            const profileModalContainer = document.getElementById('profile-modal-overlay');
-            if (profileModalContainer) {
-                profileModalContainer.innerHTML = `
-                <div class="modal" id="profile-modal" style="max-width: 500px;">
-                         <button class="close-btn" id="close-profile-btn">&times;</button>
-                         <h2>Edit Profile</h2>
-                         <div class="avatar-grid" id="avatar-grid"></div>
-                         <button id="save-profile-btn" class="btn btn-primary" style="width:100%;">Save Changes</button>
-                 </div>`;
+                                <div class="right-container">
+                                    <section class="panel">
+                                        <div id="error-message" class="error-message"></div>
+                                        <div class="row-selector">
+                                            <button id="homeRowBtn" class="row-btn active" data-row="home">Home Row</button>
+                                            <button id="topRowBtn" class="row-btn" data-row="top">Top Row</button>
+                                            <button id="bottomRowBtn" class="row-btn" data-row="bottom">Bottom Row</button>
+                                            <button id="allRowsBtn" class="row-btn" data-row="all">All Rows</button>
+                                        </div>
+                                        <div id="levelDisplay" class="level-display">Level: 1</div>
+                                        <div class="timer" id="timer">00:00.000</div>
+                                        <div class="text-display" id="targetText"></div>
+                                        <div class="typing-area"><textarea id="userInput" placeholder="Select a row and click Start..." rows="3" disabled></textarea></div>
+                                        <div class="controls">
+                                            <button id="startBtn" class="btn btn-primary">Start</button>
+                                            <button id="resetBtn" class="btn btn-secondary" disabled>Reset</button>
+                                            <button id="nextBtn" class="btn btn-secondary" disabled>Next Level</button>
+                                        </div>
+                                    </section>
+                                </div>`;
             }
 
             const resultsModalContainer = document.getElementById('results-modal-overlay');
             if (resultsModalContainer) {
                 resultsModalContainer.innerHTML = `
-                   <div class="modal results-modal" id="results-modal">
-                      <button class="close-btn" id="close-results-btn">&times;</button>
-                      <h2>Level Complete!</h2>
-                      <div class="star-rating" id="star-rating"></div>
-                      <div class="modal-stats-container">
-                          <div class="stat-graph">
-                              <svg class="progress-ring__svg" width="140" height="140"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/><circle class="progress-ring__bar" id="wpm-progress" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/></svg>
-                              <div class="stat-graph-text"><h3 id="modal-wpm">0</h3><p>WPM</p></div>
+                       <div class="modal results-modal" id="results-modal">
+                          <button class="close-btn" id="close-results-btn">&times;</button>
+                          <h2>Level Complete!</h2>
+                          <div class="star-rating" id="star-rating"></div>
+                          <div class="modal-stats-container">
+                                <div class="stat-graph">
+                                    <svg class="progress-ring__svg" width="140" height="140"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/><circle class="progress-ring__bar" id="wpm-progress" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/></svg>
+                                    <div class="stat-graph-text"><h3 id="modal-wpm">0</h3><p>WPM</p></div>
+                                </div>
+                                <div class="stat-graph">
+                                       <svg class="progress-ring__svg" width="140" height="140"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/><circle class="progress-ring__bar" id="accuracy-progress" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/></svg>
+                                       <div class="stat-graph-text"><h3 id="modal-accuracy">0%</h3><p>Accuracy</p></div>
+                                </div>
                           </div>
-                          <div class="stat-graph">
-                               <svg class="progress-ring__svg" width="140" height="140"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/><circle class="progress-ring__bar" id="accuracy-progress" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/></svg>
-                               <div class="stat-graph-text"><h3 id="modal-accuracy">0%</h3><p>Accuracy</p></div>
+                          <div class="secondary-stats">
+                                <div class="secondary-stats-item">Time<span id="modal-time">0s</span></div>
+                                <div class="secondary-stats-item" style="color: var(--success);">Correct Words<span id="modal-correct-words">0</span></div>
+                                <div class="secondary-stats-item" style="color: var(--error);">Incorrect Words<span id="modal-incorrect-words">0</span></div>
                           </div>
-                      </div>
-                      <div class="secondary-stats">
-                            <div class="secondary-stats-item">Time<span id="modal-time">0s</span></div>
-                            <div class="secondary-stats-item" style="color: var(--success);">Correct Words<span id="modal-correct-words">0</span></div>
-                            <div class="secondary-stats-item" style="color: var(--error);">Incorrect Words<span id="modal-incorrect-words">0</span></div>
-                      </div>
-                      <div class="modal-buttons">
-                          <button class="btn btn-secondary" id="retry-btn">Retry</button>
-                          <button class="btn btn-primary" id="next-challenge-btn">Next Level</button>
-                      </div>
-                  </div>`;
+                          <div class="modal-buttons">
+                                <button class="btn btn-secondary" id="retry-btn">Retry</button>
+                                <button class="btn btn-primary" id="next-challenge-btn">Next Level</button>
+                          </div>
+                    </div>`;
             }
 
             // --- Re-bind all elements after injecting HTML ---
@@ -1275,25 +1068,6 @@
             const retryBtn = document.getElementById('retry-btn');
             const themeToggle = document.getElementById('theme-toggle');
             const themeIcon = themeToggle.querySelector('i');
-            const loginBtn = document.getElementById('loginBtn');
-            const userActions = document.getElementById('user-actions');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const profileAvatar = document.getElementById('profileAvatar');
-            const authModalOverlay = document.getElementById('auth-modal-overlay');
-            const closeAuthBtn = document.getElementById('close-auth-btn');
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
-            const showSignup = document.getElementById('show-signup');
-            const showLogin = document.getElementById('show-login');
-            const profileModalOverlay = document.getElementById('profile-modal-overlay');
-            const closeProfileBtn = document.getElementById('close-profile-btn');
-            const avatarGrid = document.getElementById('avatar-grid');
-            const saveProfileBtn = document.getElementById('save-profile-btn');
-            const loginError = document.getElementById('login-error');
-            const signupError = document.getElementById('signup-error');
-            const passwordStrengthDiv = document.getElementById('password-strength');
-            const signupPasswordInput = document.getElementById('signup-password');
-            const passwordToggleIcons = document.querySelectorAll('.password-toggle-icon');
 
             // Live stats elements
             const liveWpmElement = document.getElementById('live-wpm');
@@ -1305,9 +1079,7 @@
             const liveRadius = liveWpmProgress.r.baseVal.value;
             const liveCircumference = 2 * Math.PI * liveRadius;
 
-            // *** CORRECTED AUDIO FILE ***
             const typeSound = new Audio('data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjQwLjEwMQAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIwAAHwAASUNSRAsAAAAYAAADbGF2YzU2LjYwAAAAAAAAAAAAAAAA//OExhAAAAAABGGAgBAAABHj/////xBTLEIu2AfgToAGiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/OExhQwAALhCAgCAADLce//EVMsUu9AJqgAAgAAAI8jJkGgAGJAACcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/OExhQQAAXCD+ZgAANx7/8RMyxS70AmoAACAAAjyMmQaAAYkAAJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//OExhYQAAXCD+ZgAANx7/8RMyxS70AmoAACAAAjyMmQaAAYkAAJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
 
             let startTime, timerInterval, currentSentence = '',
                 currentRow = 'home';
@@ -1328,8 +1100,7 @@
                 all: 0
             };
             let previousWpm = 0,
-                previousScore = 0; // For stat animation
-            let tempAvatarUrl = '';
+                previousScore = 0;
 
             const keyboardLayout = [
                 ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
@@ -1339,54 +1110,7 @@
                 ['ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight']
             ];
             const keyMap = {
-                '`': 'Backquote',
-                '1': 'Digit1',
-                '2': 'Digit2',
-                '3': 'Digit3',
-                '4': 'Digit4',
-                '5': 'Digit5',
-                '6': 'Digit6',
-                '7': 'Digit7',
-                '8': 'Digit8',
-                '9': 'Digit9',
-                '0': 'Digit0',
-                '-': 'Minus',
-                '=': 'Equal',
-                'q': 'KeyQ',
-                'w': 'KeyW',
-                'e': 'KeyE',
-                'r': 'KeyR',
-                't': 'KeyT',
-                'y': 'KeyY',
-                'u': 'KeyU',
-                'i': 'KeyI',
-                'o': 'KeyO',
-                'p': 'KeyP',
-                '[': 'BracketLeft',
-                ']': 'BracketRight',
-                '\\': 'Backslash',
-                'a': 'KeyA',
-                's': 'KeyS',
-                'd': 'KeyD',
-                'f': 'KeyF',
-                'g': 'KeyG',
-                'h': 'KeyH',
-                'j': 'KeyJ',
-                'k': 'KeyK',
-                'l': 'KeyL',
-                ';': 'Semicolon',
-                "'": 'Quote',
-                'z': 'KeyZ',
-                'x': 'KeyX',
-                'c': 'KeyC',
-                'v': 'KeyV',
-                'b': 'KeyB',
-                'n': 'KeyN',
-                'm': 'KeyM',
-                ',': 'Comma',
-                '.': 'Period',
-                '/': 'Slash',
-                ' ': 'Space'
+                '`': 'Backquote', '1': 'Digit1', '2': 'Digit2', '3': 'Digit3', '4': 'Digit4', '5': 'Digit5', '6': 'Digit6', '7': 'Digit7', '8': 'Digit8', '9': 'Digit9', '0': 'Digit0', '-': 'Minus', '=': 'Equal', 'q': 'KeyQ', 'w': 'KeyW', 'e': 'KeyE', 'r': 'KeyR', 't': 'KeyT', 'y': 'KeyY', 'u': 'KeyU', 'i': 'KeyI', 'o': 'KeyO', 'p': 'KeyP', '[': 'BracketLeft', ']': 'BracketRight', '\\': 'Backslash', 'a': 'KeyA', 's': 'KeyS', 'd': 'KeyD', 'f': 'KeyF', 'g': 'KeyG', 'h': 'KeyH', 'j': 'KeyJ', 'k': 'KeyK', 'l': 'KeyL', ';': 'Semicolon', "'": 'Quote', 'z': 'KeyZ', 'x': 'KeyX', 'c': 'KeyC', 'v': 'KeyV', 'b': 'KeyB', 'n': 'KeyN', 'm': 'KeyM', ',': 'Comma', '.': 'Period', '/': 'Slash', ' ': 'Space'
             };
 
             const sleep = ms => new Promise(res => setTimeout(res, ms));
@@ -1418,25 +1142,18 @@
             async function animateFooterLogo() {
                 const logoEl = document.getElementById('footer-logo');
                 if (!logoEl) return;
-
                 logoEl.classList.add('typing-effect');
-                await sleep(2000); // Wait a bit after page load
-
-                const part1 = "Minimel"; // Typo
+                await sleep(2000);
+                const part1 = "Minimel";
                 for (const char of part1) {
                     logoEl.textContent += char;
                     await sleep(120);
                 }
-
                 await sleep(600);
-
-                // Backspace the typo
                 logoEl.textContent = logoEl.textContent.slice(0, -1);
                 await sleep(120);
                 logoEl.textContent = logoEl.textContent.slice(0, -1);
                 await sleep(400);
-
-                // Type the correction and the rest of the phrase
                 const part2 = "al Typing";
                 for (const char of part2) {
                     logoEl.textContent += char;
@@ -1444,178 +1161,54 @@
                 }
             }
 
-
-            async function init() {
+            function init() {
                 [liveWpmProgress, liveAccuracyProgress, liveScoreProgress].forEach(p => {
                     p.style.strokeDasharray = `${liveCircumference} ${liveCircumference}`;
                     p.style.strokeDashoffset = liveCircumference;
                 });
                 animateTitle();
                 animateFooterLogo();
-                await fetchSentences();
+                fetchSentences();
                 createKeyboard();
                 addEventListeners();
                 initTheme();
-                initAuth();
                 switchRow(currentRow);
             }
 
-            async function fetchSentences() {
-                try {
-                    const [homeDoc, topDoc, bottomDoc, allDoc] = await Promise.all([db.collection('sentences').doc('home').get(), db.collection('sentences').doc('top').get(), db.collection('sentences').doc('bottom').get(), db.collection('sentences').doc('all').get()]);
-                    rowSentences.home = homeDoc.exists && homeDoc.data().sentences?.length > 0 ? homeDoc.data().sentences : ["Default home sentence."];
-                    rowSentences.top = topDoc.exists && topDoc.data().sentences?.length > 0 ? topDoc.data().sentences : ["Default top sentence."];
-                    rowSentences.bottom = bottomDoc.exists && bottomDoc.data().sentences?.length > 0 ? bottomDoc.data().sentences : ["Default bottom sentence."];
-                    rowSentences.all = allDoc.exists && allDoc.data().sentences?.length > 0 ? allDoc.data().sentences : ["Default 'all' sentence, please check Firestore."];
-                } catch (error) {
-                    console.error("Error fetching sentences from Firestore:", error);
-                    showError("Could not load practice sentences from the database.");
-                    rowSentences = {
-                        home: ["a sad lad asks a fast flash;"],
-                        top: ["we were quiet you try to type;"],
-                        bottom: ["zany zebras zoom can a man buzz;"],
-                        all: ["the quick brown fox jumps over a lazy dog;"]
-                    };
-                }
+            function fetchSentences() {
+                // Sentences are now hardcoded as Firebase functionality has been removed.
+                rowSentences = {
+                    home: [
+                        "a sad lad asks a fast flash;",
+                        "a lass asks a lad; fad; sad;",
+                        "dad falls; ask a sad lass;",
+                        "a flask; a sad dad; a glad fall;",
+                        "salad; flask; adds; ask;"
+                    ],
+                    top: [
+                        "we were quiet you try to type;",
+                        "your pet parrot is quite quiet;",
+                        "to put out power you uproot it;",
+                        "the poet wrote a poor requiem;",
+                        "we tie up our wet water pipe;"
+                    ],
+                    bottom: [
+                        "zany zebras zoom can a man buzz;",
+                        "my crazy cat avoids my mom;",
+                        "a man can wax a cab in a maze;",
+                        "max can zoom by in a cab;",
+                        "a vast zebra moves in a cave;"
+                    ],
+                    all: [
+                        "the quick brown fox jumps over a lazy dog;",
+                        "pack my box with five dozen liquor jugs;",
+                        "how vexingly quick daft zebras jump;",
+                        "a wizard's job is to vex chumps quickly in fog;",
+                        "by Jove, my quick study of lexicography won a prize;"
+                    ]
+                };
             }
-            function initAuth() {
-                auth.onAuthStateChanged(async user => {
-                    if (user) {
-                        loginBtn.classList.add('hidden');
-                        userActions.classList.remove('hidden');
-                        const userProfile = await getUserProfile(user.uid);
-                        profileAvatar.src = userProfile.avatarUrl || `https://api.dicebear.com/7.x/micah/svg?seed=${user.email}`;
-                    } else {
-                        loginBtn.classList.remove('hidden');
-                        userActions.classList.add('hidden');
-                    }
-                });
-            }
-            async function getUserProfile(uid) {
-                try {
-                    const userDoc = await db.collection('email').doc(uid).get();
-                    return userDoc.exists ? userDoc.data() : {};
-                } catch (error) {
-                    console.error("Error fetching user profile:", error);
-                    return {};
-                }
-            }
-            function handleAuth(e) {
-                e.preventDefault();
-                const isSignup = e.target.id === 'signup-form';
-                const email = document.getElementById(isSignup ? 'signup-email' : 'login-email').value;
-                const password = document.getElementById(isSignup ? 'signup-password' : 'login-password').value;
-                const errorEl = document.getElementById(isSignup ? 'signup-error' : 'login-error');
-                errorEl.style.display = 'none';
-                if (isSignup) {
-                    const name = document.getElementById('signup-name').value;
-                    const confirmPassword = document.getElementById('signup-confirm-password').value;
-                    if (password !== confirmPassword) {
-                        errorEl.textContent = "Passwords do not match.";
-                        errorEl.style.display = 'block';
-                        return;
-                    }
-                    if (checkPasswordStrength(password) < 2) {
-                        errorEl.textContent = "Password is too weak.";
-                        errorEl.style.display = 'block';
-                        return;
-                    }
-                    auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
-                        const user = userCredential.user;
-                        db.collection('email').doc(user.uid).set({
-                            name: name,
-                            email: user.email,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            avatarUrl: `https://api.dicebear.com/7.x/micah/svg?seed=${user.email}`
-                        });
-                        authModalOverlay.classList.remove('visible');
-                    }).catch(err => {
-                        errorEl.textContent = err.message;
-                        errorEl.style.display = 'block';
-                    });
-                } else {
-                    auth.signInWithEmailAndPassword(email, password).then(() => authModalOverlay.classList.remove('visible')).catch(err => {
-                        errorEl.textContent = "Invalid login credentials. Please try again.";
-                        errorEl.style.display = 'block';
-                    });
-                }
-            }
-            passwordToggleIcons.forEach(icon => {
-                icon.addEventListener('click', () => {
-                    const input = icon.previousElementSibling;
-                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                    input.setAttribute('type', type);
-                    icon.classList.toggle('fa-eye');
-                    icon.classList.toggle('fa-eye-slash');
-                });
-            });
-            function checkPasswordStrength(password) {
-                let strength = 0;
-                if (password.length >= 8) strength++;
-                if (password.match(/[a-z]/)) strength++;
-                if (password.match(/[A-Z]/)) strength++;
-                if (password.match(/[0-9]/)) strength++;
-                if (password.match(/[^a-zA-Z0-9]/)) strength++;
-                return strength;
-            }
-            signupPasswordInput.addEventListener('input', () => {
-                const password = signupPasswordInput.value;
-                const strength = checkPasswordStrength(password);
-                passwordStrengthDiv.className = '';
-                if (password.length > 0) {
-                    if (strength < 3) {
-                        passwordStrengthDiv.textContent = 'Weak';
-                        passwordStrengthDiv.className = 'weak';
-                    } else if (strength < 5) {
-                        passwordStrengthDiv.textContent = 'Medium';
-                        passwordStrengthDiv.className = 'medium';
-                    } else {
-                        passwordStrengthDiv.textContent = 'Strong';
-                        passwordStrengthDiv.className = 'strong';
-                    }
-                } else {
-                    passwordStrengthDiv.textContent = '';
-                }
-            });
-            function populateAvatarGrid() {
-                avatarGrid.innerHTML = '';
-                for (let i = 0; i < 20; i++) {
-                    const avatarSrc = `https://api.dicebear.com/7.x/micah/svg?seed=avatar${i}`;
-                    const img = document.createElement('img');
-                    img.src = avatarSrc;
-                    img.className = 'avatar-option';
-                    img.addEventListener('click', () => {
-                        document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
-                        img.classList.add('selected');
-                        tempAvatarUrl = avatarSrc;
-                    });
-                    avatarGrid.appendChild(img);
-                }
-            }
-            async function saveProfile() {
-                if (!tempAvatarUrl) return;
-                const user = auth.currentUser;
-                if (user) {
-                    try {
-                        saveProfileBtn.disabled = true;
-                        saveProfileBtn.textContent = "Saving...";
-                        await db.collection('email').doc(user.uid).set({
-                            avatarUrl: tempAvatarUrl
-                        }, {
-                            merge: true
-                        });
-                        profileAvatar.src = tempAvatarUrl;
-                        profileModalOverlay.classList.remove('visible');
-                        tempAvatarUrl = '';
-                    } catch (error) {
-                        console.error("Error updating profile: ", error);
-                        alert("Could not save profile.");
-                    } finally {
-                        saveProfileBtn.disabled = false;
-                        saveProfileBtn.textContent = "Save Changes";
-                    }
-                }
-            }
+
             function addEventListeners() {
                 mobileMenuBtn.addEventListener('click', () => {
                     navRightActions.classList.toggle('active');
@@ -1638,38 +1231,23 @@
                     retryChallenge();
                 });
                 themeToggle.addEventListener('click', toggleTheme);
-                loginBtn.addEventListener('click', () => authModalOverlay.classList.add('visible'));
-                closeAuthBtn.addEventListener('click', () => authModalOverlay.classList.remove('visible'));
-                logoutBtn.addEventListener('click', () => auth.signOut());
-                loginForm.addEventListener('submit', handleAuth);
-                signupForm.addEventListener('submit', handleAuth);
-                showSignup.addEventListener('click', () => {
-                    signupForm.classList.remove('hidden');
-                    loginForm.classList.add('hidden');
-                });
-                showLogin.addEventListener('click', () => {
-                    loginForm.classList.remove('hidden');
-                    signupForm.classList.add('hidden');
-                });
-                profileAvatar.addEventListener('click', () => {
-                    populateAvatarGrid();
-                    profileModalOverlay.classList.add('visible');
-                });
-                closeProfileBtn.addEventListener('click', () => profileModalOverlay.classList.remove('visible'));
-                saveProfileBtn.addEventListener('click', saveProfile);
             }
+
             function initTheme() {
                 const savedTheme = localStorage.getItem('theme') || 'light';
                 setTheme(savedTheme);
             }
+
             function setTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
                 themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
             }
+
             function toggleTheme() {
                 setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
             }
+
             function createKeyboard() {
                 keyboardContainer.innerHTML = '';
                 keyboardLayout.forEach(row => {
@@ -1685,19 +1263,7 @@
                             keyDiv.setAttribute('data-key', keyMap[keyLower] || key);
                         }
                         const displayMap = {
-                            'ShiftLeft': '<i class="fas fa-arrow-up"></i>',
-                            'ShiftRight': '<i class="fas fa-arrow-up"></i>',
-                            'CapsLock': '<i class="fas fa-lock"></i>',
-                            'Space': '',
-                            'Backspace': '⌫',
-                            'Tab': 'Tab',
-                            'Enter': 'Enter',
-                            'ControlLeft': 'Ctrl',
-                            'ControlRight': 'Ctrl',
-                            'MetaLeft': 'Cmd',
-                            'AltLeft': 'Alt',
-                            'AltRight': 'Alt',
-                            '\\': '\\'
+                            'ShiftLeft': '<i class="fas fa-arrow-up"></i>', 'ShiftRight': '<i class="fas fa-arrow-up"></i>', 'CapsLock': '<i class="fas fa-lock"></i>', 'Space': '', 'Backspace': '⌫', 'Tab': 'Tab', 'Enter': 'Enter', 'ControlLeft': 'Ctrl', 'ControlRight': 'Ctrl', 'MetaLeft': 'Cmd', 'AltLeft': 'Alt', 'AltRight': 'Alt', '\\': '\\'
                         };
                         keyDiv.innerHTML = displayMap[key] || key;
                         rowDiv.appendChild(keyDiv);
@@ -1705,6 +1271,7 @@
                     keyboardContainer.appendChild(rowDiv);
                 });
             }
+
             function showError(message) {
                 clearTimeout(errorTimeout);
                 errorMessage.textContent = message;
@@ -1713,6 +1280,7 @@
                     errorMessage.style.display = 'none';
                 }, 5000);
             }
+
             function updateLevelDisplay() {
                 levelDisplayElement.textContent = `Level: ${currentLevels[currentRow] + 1}`;
             }
@@ -1921,7 +1489,7 @@
 
             function handleKeyDown(e) {
                 if (challengeActive) {
-                    typeSound.currentTime = 0; // Rewind to start to allow rapid playing
+                    typeSound.currentTime = 0;
                     typeSound.play();
                     flashKeyFeedback(e);
                     const keyElement = document.querySelector(`.key[data-key="${e.code}"]`);
