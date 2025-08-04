@@ -4,14 +4,6 @@ A responsive web application designed to help users master touch typing with int
 
 ## ✨ Key Features
 
-### Core Learning System
-- **Structured Lessons**: Home row (`f`, `j`, `asdf`) to full keyboard progression
-- **Visual Keyboard**: Real-time highlight for pressed keys
-- **Performance Metrics**: 
-  - ⌛ Words Per Minute (WPM) tracking  
-  - � Accuracy percentage
-  - 📈 Progress visualization
-
 ### User Experience
 - 🌓 Light/Dark mode toggle
 - 📱 Fully responsive (mobile, tablet, desktop)
@@ -30,8 +22,8 @@ A responsive web application designed to help users master touch typing with int
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/yourusername/touch-typing.git
-cd touch-typing
+git clone https://github.com/avdeshjadon-dev/TouchTyping.git
+cd TouchTyping
 # Open in default browser:
 start index.html  # Windows
 open index.html   # Mac
