@@ -22,9 +22,10 @@ A responsive web application designed to help users master touch typing with int
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/avdeshjadon-dev/TouchTyping.git
+git clone https://github.com/avdeshjadon/TouchTyping.git
 cd TouchTyping
 # Open in default browser:
 start index.html  # Windows
 open index.html   # Mac
 xdg-open index.html  # Linux
+```
